@@ -27,11 +27,14 @@ Community-based social media app. Could be used to meet new people with similar 
 * User logs in and is redirected to their primary community's page
 * Members of a community can create/view/edit posts
 * Relative time of post is shown
-* Once a week, communities with different interests are combined (into a third community), with the goal of members sharing their interests with the other community.
+* Communities with different interests can be combined into a third community, with the goal of members sharing their interests with the other community.
 * After a certain time period, the two communities return back to normal and the process repeats.
 * Users can toggle their participation in weekly community combinations.
 * Profile pages for each user
 * Settings (Accesibility, Notification, General, etc.)
+* Toggleable Profanity Filter, requires due consideration
+* User can update profile picture
+* AI API for Moderation
 
 **Optional Nice-to-have Stories**
 
@@ -39,7 +42,7 @@ Community-based social media app. Could be used to meet new people with similar 
 * Posts can be flagged for removal
 * Following other users
 * Can search for communities
-* Users can own/create more than one community
+* Users can create a community
 * Users can select moderators for the community
 
 ### 2. Screen Archetypes
@@ -53,13 +56,21 @@ Community-based social media app. Could be used to meet new people with similar 
 * Profile Screen 
    * Allows user to upload a photo and fill in required information
    * Allows user to select their primary community
+   * Settings
 * Community feed
    * Allows user to view posts from other memebers of the community
    * Allows user to edit their own posts
+   * Browse Communities
+* Detail View
+    * Can comment on posts and reply to other comments
+    * 
 * Create Post
     * Allows user to create post
 * Settings Screen
    * Lets people change app notification settings.
+* Events (Mixes)
+    * Allows users to see list of events (mixes) involving their communities.
+    * Owner of community can create or close events (mixes).
 
 ### 3. Navigation
 
@@ -83,13 +94,13 @@ Optional:
 * Settings -> Toggle settings
 
 ## Wireframes
-<img src="https://i.imgur.com/9CrjH1K.jpg" width=800><br>
+<img src="https://raw.githubusercontent.com/Corporate-Jargon/Mxer/master/wireframes/Lo-Fi.png" width=800><br>
 
 ### [BONUS] Digital Wireframes & Mockups
-<img src="https://i.imgur.com/lYHn37F.jpg" height=200>
+<img src="https://raw.githubusercontent.com/Corporate-Jargon/Mxer/master/wireframes/Hi-Fi.png" height=200>
 
 ### [BONUS] Interactive Prototype
-<img src="https://i.imgur.com/AiKfE5g.gif" width=200>
+<img src="https://raw.githubusercontent.com/Corporate-Jargon/Mxer/master/wireframes/Prototype.gif" width=200>
 
 ## Schema 
 ### Models
