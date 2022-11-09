@@ -1,4 +1,4 @@
-package com.example.cs388project
+package com.example.mxer
 
 import org.junit.Test
 

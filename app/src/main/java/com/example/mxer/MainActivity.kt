@@ -1,4 +1,4 @@
-package com.example.cs388project
+package com.example.mxer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
