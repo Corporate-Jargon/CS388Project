@@ -36,11 +36,11 @@
         app:layout_constraintTop_toBottomOf="@+id/et_username" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/register_button"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
-        android:text="Log In"
+        android:text="Register"
         android:textSize="17sp"
         android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Log In to MXER"
+        android:text="Register New User"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,10 +70,10 @@
         android:textSize="20sp"/>
 
     <TextView
-        android:id="@+id/Register"
+        android:id="@+id/LogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have an account? Register"
+        android:text="Already have an account? Log in"
         tools:layout_editor_absoluteX="110dp"
         tools:layout_editor_absoluteY="687dp"
         android:clickable="true"/>
