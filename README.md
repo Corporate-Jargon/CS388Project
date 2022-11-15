@@ -132,7 +132,7 @@ Optional:
    | objectId      | String   | unique id for community (default field) |
    | name       | String| Display name of community |
    | icon        | File     | Icon for community |
-   | description     | String   | Editable "About Me" for user |
+   | description     | String   | Description of community |
    | event_community1 | Pointer to Community | If specific community is event, points to first community in the event. null otherwise
    | event_community2 | Pointer to Community | If specific community is event, points to second community in the event. null otherwise
    | createdAt     | DateTime | date when community is created (default field) |
