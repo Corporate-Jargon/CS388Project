@@ -109,59 +109,193 @@ Optional:
    | Property      | Type     | Description |
    | ------------- | -------- | ------------|
    | objectId      | String   | unique id for the user post (default field) |
-   | author        | Pointer to User| image author |
+   | author        | Pointer to User| post author |
    | image         | File     | image that user posts |
-   | caption       | String   | image caption by author |
-   | commentsCount | Number   | number of comments that has been posted to an image |
-   | likesCount    | Number   | number of likes for the post |
+   | description     | String   | post text |
+   | community | Pointer to Community | community which post was made in
+   | createdAt     | DateTime | date when post is created (default field) |
+   | updatedAt     | DateTime | date when post is last updated (default field) |
+#### User
+| Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for user (default field) |
+   | name       | String| Display name of user |
+   | profile_picture        | File     | Profile Picture of user |
+   | description     | String   | Editable "About Me" for user |
+   | primary_community | Pointer to Community | Primary Community of User |
+   | joined_communities | Array of Pointer to Community | All communities which this user is a member of |
+   | createdAt     | DateTime | date when user is created (default field) |
+   | updatedAt     | DateTime | date when user is last updated (default field) |
+#### Community
+ | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for community (default field) |
+   | name       | String| Display name of community |
+   | icon        | File     | Icon for community |
+   | description     | String   | Editable "About Me" for user |
+   | event_community1 | Pointer to Community | If specific community is event, points to first community in the event. null otherwise
+   | event_community2 | Pointer to Community | If specific community is event, points to second community in the event. null otherwise
+   | createdAt     | DateTime | date when community is created (default field) |
+   | updatedAt     | DateTime | date when community is last updated (default field) |
+ #### Comment
+  | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the comment (default field) |
+   | author        | Pointer to User| comment author |
+   | reply_to | Pointer to Post | Post which comment is a comment of
+   | description     | String   | comment text |
    | createdAt     | DateTime | date when post is created (default field) |
    | updatedAt     | DateTime | date when post is last updated (default field) |
 ### Networking
-#### List of network requests by screen
-   - Home Feed Screen
-      - (Read/GET) Query all posts where user is author
-         ```swift
-         let query = PFQuery(className:"Post")
-         query.whereKey("author", equalTo: currentUser)
-         query.order(byDescending: "createdAt")
-         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
-            if let error = error { 
-               print(error.localizedDescription)
-            } else if let posts = posts {
-               print("Successfully retrieved \(posts.count) posts.")
-           // TODO: Do something with posts...
-            }
-         }
-         ```
-      - (Create/POST) Create a new like on a post
-      - (Delete) Delete existing like
-      - (Create/POST) Create a new comment on a post
-      - (Delete) Delete existing comment
+#### List of network requests by screen  
    - Create Post Screen
       - (Create/POST) Create a new post object
+      ```kotlin
+        fun makePost(image: File, description: String, community: Community){
+            val post = Post()
+            post.setAuthor(ParseUser.getCurrentUser())
+            post.setImage(ParseFile(image))
+            post.setDescription(description)
+            post.setCommunity(community)
+            post.saveInBackground { e ->
+                if (e != null) {
+                    Log.e(TAG, e.printStackTrace().toString())
+                } else {
+                    Log.i(TAG, "Successfully saved post")
+                }
+            }
+        }
+      ```
+  - Post Detail Screen
+      - (Create/POST) Create a new reply object
+      ```kotlin
+        fun makeReply(post: Post, description: String){
+            //make comment reply
+            val comment = Comment()
+            comment.setAuthor(ParseUser.getCurrentUser())
+            comment.setReplyTo(post)
+            comment.setDescription(description)
+            comment.saveInBackground { e ->
+                if (e == null) {
+                    Log.i(Companion.TAG, "Successfully replied")
+                } else {
+                    Log.e(Companion.TAG, e.printStackTrace().toString())
+                }
+            }
+        }
+      ```
+      - (Read/GET) Query all replies to post
+      ```kotlin
+        fun getReplies(post: Post): List<Post> {
+             val query = ParseQuery<ParseObject>("Comment")
+             query.addDescendingOrder("createdAt")
+             query.whereEqualTo("reply_to", currentPost)
+              query.findInBackground { objects: List<Post>, e: ParseException? ->
+                  if (e == null) {
+                      Log.d(Companion.TAG, "Objects: $objects")
+                      return objects
+                  } else {
+                      Log.e(Companion.TAG, "ParseError: ", e)
+                  }
+              }
+        }
+    ```
+  - Community Screen
+      - (Read/GET) Query all posts from community
+         ```kotlin
+        fun getPosts(community: Community): List<Post> {
+         val query = ParseQuery<ParseObject>("Post")
+         query.addDescendingOrder("createdAt")
+         query.whereEqualTo("community", currentCommunity)
+          query.findInBackground { objects: List<Post>, e: ParseException? ->
+              if (e == null) {
+                  Log.d(Companion.TAG, "Objects: $objects")
+                  return objects
+              } else {
+                  Log.e(Companion.TAG, "ParseError: ", e)
+              }
+            }
+        }
+         ```
+    - (Update/PUT) Allow user to join community
+    ```kotlin
+    fun joinCommunity(community: Community){
+        val user = ParseUser.getCurrentUser()
+        val comms = user.getJoinedCommunities()
+        comms.append(community)
+        user.setJoinedCommunity(comms)
+        user.saveInBackground { e ->
+             if (e == null) {
+                 Log.i(Companion.TAG, "Successfully saved profile picture")
+             } else {
+                 Log.e(Companion.TAG, e.printStackTrace().toString())
+             }
+        }
+    }
+    ```
    - Profile Screen
       - (Read/GET) Query logged in user object
+      ```kotlin
+         val query = ParseQuery<ParseObject>("User")
+         query.whereEqualTo("objectId", currentUser)
+          query.findInBackground { objects: List<ParseObject>, e: ParseException? ->
+              if (e == null) {
+                  Log.d(Companion.TAG, "Objects: $objects")
+              } else {
+                  Log.e(Companion.TAG, "ParseError: ", e)
+              }
+          }
+        ```
       - (Update/PUT) Update user profile image
-#### [OPTIONAL:] Existing API Endpoints
-##### An API Of Ice And Fire
-- Base URL - [http://www.anapioficeandfire.com/api](http://www.anapioficeandfire.com/api)
+      ```kotlin
+        fun setPfp(image: File){
+            val user = ParseUser.getCurrentUser()
+            val pFile = ParseFile(image)
+            user.put("profile_picture", pFile)
+            user.saveInBackground { e ->
+                if (e == null) {
+                    Log.i(Companion.TAG, "Successfully saved profile picture")
+                } else {
+                    Log.e(Companion.TAG, e.printStackTrace().toString())
+                }
+            }
+        }
+        ```
+  - Events Screen
+      - (Read/GET) Query events 
+      ```kotlin
+        fun getEvents(): List<Community>{
+         val query = ParseQuery<ParseObject>("Community")
+         query.whereExists("event_community1")
+          query.findInBackground { objects: List<Community>, e: ParseException? ->
+              if (e == null) {
+                  Log.d(Companion.TAG, "Objects: $objects")
+                  return objects
+              } else {
+                  Log.e(Companion.TAG, "ParseError: ", e)
+              }
+           }
+        }
+    ```
+ - Communities Screen
+     -  (Read/GET) Query communities
+      ```kotlin
+        fun getCommunities(): List<Community> {
+         val query = ParseQuery<ParseObject>("Community")
+          query.findInBackground { objects: List<Community>, e: ParseException? ->
+              if (e == null) {
+                  Log.d(Companion.TAG, "Objects: $objects")
+                  return objects
+              } else {
+                  Log.e(Companion.TAG, "ParseError: ", e)
+              }
+          }
+        }
+    ```
+#### Existing API Endpoints
+##### Perspective API
+- Base URL - [https://commentanalyzer.googleapis.com/v1alpha1](https://commentanalyzer.googleapis.com/v1alpha1)
 
    HTTP Verb | Endpoint | Description
    ----------|----------|------------
-    `GET`    | /characters | get all characters
-    `GET`    | /characters/?name=name | return specific character by name
-    `GET`    | /houses   | get all houses
-    `GET`    | /houses/?name=name | return specific house by name
-
-##### Game of Thrones API
-- Base URL - [https://api.got.show/api](https://api.got.show/api)
-
-   HTTP Verb | Endpoint | Description
-   ----------|----------|------------
-    `GET`    | /cities | gets all cities
-    `GET`    | /cities/byId/:id | gets specific city by :id
-    `GET`    | /continents | gets all continents
-    `GET`    | /continents/byId/:id | gets specific continent by :id
-    `GET`    | /regions | gets all regions
-    `GET`    | /regions/byId/:id | gets specific region by :id
-    `GET`    | /characters/paths/:name | gets a character's path with a given name
+    `POST`    | /comments:analyze | get the toxicity probability
