@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.RegisterFragment"
     android:background="#F18805">
 
     <EditText
@@ -18,7 +18,8 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginText" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginText"
+        android:fontFamily="@font/inter_regular"/>
 
     <EditText
         android:id="@+id/et_password"
@@ -33,19 +34,22 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_username" />
+        app:layout_constraintTop_toBottomOf="@+id/et_username"
+        android:fontFamily="@font/inter_regular"/>
 
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="100dp"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
-        android:text="Log In"
+        android:text="Register"
         android:textSize="17sp"
         android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        android:textAllCaps="false"
+        android:fontFamily="@font/inter_regular"/>
 
     <ImageView
         android:id="@+id/mxerLogo"
@@ -62,20 +66,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Log In to MXER"
+        android:text="Register New User"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mxerLogo"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:fontFamily="@font/inter_regular"/>
 
     <TextView
-        android:id="@+id/Register"
+        android:id="@+id/LogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have an account? Register"
-        tools:layout_editor_absoluteX="110dp"
-        tools:layout_editor_absoluteY="687dp"
-        android:clickable="true"/>
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:text="Already have an account? Log in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/inter_regular"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
