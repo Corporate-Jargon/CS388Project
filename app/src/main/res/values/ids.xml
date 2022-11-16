@@ -4,4 +4,5 @@
     <item name="et_username" type="id" />
     <item name="et_password" type="id" />
     <item name="signupBtn" type="id" />
+    <item name="action_home" type="id" />
 </resources>
