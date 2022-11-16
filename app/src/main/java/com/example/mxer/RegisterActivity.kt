@@ -20,7 +20,7 @@ class RegisterActivity : LoginActivity() {
             goToMainActivity()
         }
 
-        findViewById<Button>(R.id.signupBtn).setOnClickListener {
+        findViewById<Button>(R.id.register_button).setOnClickListener {
             val username = findViewById<EditText>(R.id.et_username).text.toString()
             val password = findViewById<EditText>(R.id.et_password).text.toString()
             signUpUser(username, password)
