@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.RegisterFragment"
     android:background="#F18805">
 
     <EditText
@@ -14,11 +13,12 @@
         android:layout_marginTop="20dp"
         android:width="200dp"
         android:background="@drawable/rounded_edittext"
-        android:hint=" Username"
+        android:hint="Username"
+        android:paddingLeft="15dp"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginText"
+        app:layout_constraintTop_toBottomOf="@+id/register_text"
         android:fontFamily="@font/inter_regular"/>
 
     <EditText
@@ -29,7 +29,8 @@
         android:width="280dp"
         android:background="@drawable/rounded_edittext"
         android:ems="10"
-        android:hint=" Password"
+        android:hint="Password"
+        android:paddingLeft="15dp"
         android:inputType="textPassword"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +53,7 @@
         android:fontFamily="@font/inter_regular"/>
 
     <ImageView
-        android:id="@+id/mxerLogo"
+        android:id="@+id/mxer_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
@@ -62,7 +63,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/LoginText"
+        android:id="@+id/register_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -70,20 +71,34 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mxerLogo"
+        app:layout_constraintTop_toBottomOf="@+id/mxer_logo"
         android:textSize="20sp"
         android:fontFamily="@font/inter_regular"/>
 
     <TextView
-        android:id="@+id/LogIn"
+        android:id="@+id/pre_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:text="Already have an account? Log in"
+        android:layout_marginStart="-30dp"
+        android:fontFamily="@font/inter_regular"
+        android:minHeight="48dp"
+        android:text="Already have an account?"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:fontFamily="@font/inter_regular"/>
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/login_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        android:fontFamily="@font/inter_regular"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="Log in"
+        android:textColor="#3366CC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pre_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
