@@ -18,7 +18,7 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginText"
+        app:layout_constraintTop_toBottomOf="@+id/login_text"
         android:fontFamily="@font/inter_regular"/>
 
     <EditText
@@ -54,7 +54,7 @@
         android:fontFamily="@font/inter_regular"/>
 
     <ImageView
-        android:id="@+id/mxerLogo"
+        android:id="@+id/mxer_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
@@ -64,7 +64,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/LoginText"
+        android:id="@+id/login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -72,20 +72,33 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mxerLogo"
+        app:layout_constraintTop_toBottomOf="@+id/mxer_logo"
         android:textSize="20sp"
         android:fontFamily="@font/inter_regular"/>
 
     <TextView
-        android:id="@+id/Register"
+        android:id="@+id/pre_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:text="Don't have an account? Register"
+        android:layout_marginStart="-30dp"
+        android:fontFamily="@font/inter_regular"
+        android:minHeight="48dp"
+        android:text="Don't have an account?"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:fontFamily="@font/inter_regular"/>
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/login_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:clickable="true"
+        android:fontFamily="@font/inter_regular"
+        android:minHeight="48dp"
+        android:text="Register"
+        android:textColor="#3366CC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pre_register" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
