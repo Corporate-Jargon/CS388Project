@@ -4,6 +4,7 @@ import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
+import org.json.JSONObject
 
 
 @ParseClassName("Post")
@@ -31,6 +32,12 @@ class Post : ParseObject() {
     }
     fun setProfane(profane: Double) {
         put(KEY_PROFANE, profane)
+    }
+    fun getComm(): ParseObject? {
+        return getParseObject(KEY_COMM)
+    }
+    fun setComm(obj: ParseObject) {
+        put(KEY_COMM, obj)
     }
 
 
