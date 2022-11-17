@@ -28,22 +28,24 @@ class RegisterActivity : LoginActivity() {
     }
 
     private fun signUpUser(username: String, password: String) {
-        // Create the ParseUser
-        val user = ParseUser()
+                        goToMainActivity()
 
-        // Set fields for the user to be created
-        user.setUsername(username)
-        user.setPassword(password)
-
-        user.signUpInBackground { e ->
-            if (e == null) {
-                goToMainActivity()
-                Toast.makeText(this, "Mixed up!", Toast.LENGTH_SHORT).show()
-            } else {
-                e.printStackTrace()
-                Toast.makeText(this, "Error mixing up", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        // Create the ParseUser
+//        val user = ParseUser()
+//
+//        // Set fields for the user to be created
+//        user.setUsername(username)
+//        user.setPassword(password)
+//
+//        user.signUpInBackground { e ->
+//            if (e == null) {
+//                goToMainActivity()
+//                Toast.makeText(this, "Mixed up!", Toast.LENGTH_SHORT).show()
+//            } else {
+//                e.printStackTrace()
+//                Toast.makeText(this, "Error mixing up", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     companion object {

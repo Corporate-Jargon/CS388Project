@@ -18,7 +18,7 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_text"
+        app:layout_constraintTop_toBottomOf="@+id/register_text"
         android:fontFamily="@font/inter_regular"/>
 
     <EditText
@@ -63,7 +63,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/login_text"
+        android:id="@+id/register_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
