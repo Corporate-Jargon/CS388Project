@@ -24,11 +24,18 @@ class Comment: ParseObject() {
     fun setDescription(desc: String) {
         put(KEY_DESCRIPTION, desc)
     }
+    fun getProfane(): Double? {
+        return getDouble(KEY_PROFANE)
+    }
+    fun setProfane(profane: Double) {
+        put(KEY_PROFANE, profane)
+    }
 
 
     companion object {
         const val KEY_AUTHOR = "author"
         const val KEY_REPLY = "reply_to"
         const val KEY_DESCRIPTION = "description"
+        const val KEY_PROFANE = "profane"
     }
 }
