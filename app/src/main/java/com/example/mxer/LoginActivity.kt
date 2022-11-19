@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.parse.ParseUser
 
@@ -25,6 +26,10 @@ open class LoginActivity : AppCompatActivity() {
             val username = findViewById<EditText>(R.id.et_username).text.toString()
             val password = findViewById<EditText>(R.id.et_password).text.toString()
             loginUser(username, password)
+        }
+        findViewById<TextView>(R.id.login_link).setOnClickListener{
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 

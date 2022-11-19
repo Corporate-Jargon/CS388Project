@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.parse.ParseUser
 
@@ -25,27 +26,27 @@ class RegisterActivity : LoginActivity() {
             val password = findViewById<EditText>(R.id.et_password).text.toString()
             signUpUser(username, password)
         }
+        findViewById<TextView>(R.id.login_link).setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun signUpUser(username: String, password: String) {
-                        goToMainActivity()
-
-//        // Create the ParseUser
-//        val user = ParseUser()
-//
-//        // Set fields for the user to be created
-//        user.setUsername(username)
-//        user.setPassword(password)
-//
-//        user.signUpInBackground { e ->
-//            if (e == null) {
-//                goToMainActivity()
-//                Toast.makeText(this, "Mixed up!", Toast.LENGTH_SHORT).show()
-//            } else {
-//                e.printStackTrace()
-//                Toast.makeText(this, "Error mixing up", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        // Create the ParseUser
+        val user = ParseUser()
+        // Set fields for the user to be created
+        user.setUsername(username)
+        user.setPassword(password)
+        user.signUpInBackground { e ->
+            if (e == null) {
+                goToMainActivity()
+                Toast.makeText(this, "Mixed up!", Toast.LENGTH_SHORT).show()
+            } else {
+                e.printStackTrace()
+                Toast.makeText(this, "Error mixing up", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {
