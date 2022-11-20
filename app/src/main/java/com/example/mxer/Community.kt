@@ -1,9 +1,10 @@
 package com.example.mxer
 
 import com.parse.ParseClassName
+import com.parse.ParseObject
 
 @ParseClassName("Community")
-class Community {
+class Community: ParseObject() {
 
     companion object {
         const val KEY_NAME = "name"
