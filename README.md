@@ -27,14 +27,14 @@ Community-based social media app. Could be used to meet new people with similar 
 - [X] User logs in and is redirected to their primary community's page
 - [ ] Members of a community can create/view/edit posts
 - [ ] Relative time of post is shown
-- [ ]Communities with different interests can be combined into a third community, with the goal of members sharing their interests with the other community.
-- [ ]After a certain time period, the two communities return back to normal and the process repeats.
-- [ ]Users can toggle their participation in weekly community combinations.
-- [ ]Profile pages for each user
-- [ ]Settings (Accesibility, Notification, General, etc.)
-- [ ]Toggleable Profanity Filter, requires due consideration
-- [ ]User can update profile picture
-- [ ]AI API for Moderation
+- [ ] Communities with different interests can be combined into a third community, with the goal of members sharing their interests with the other community.
+- [ ] After a certain time period, the two communities return back to normal and the process repeats.
+- [ ] Users can toggle their participation in weekly community combinations.
+- [ ] Profile pages for each user
+- [ ] Settings (Accesibility, Notification, General, etc.)
+- [ ] Toggleable Profanity Filter, requires due consideration
+- [ ] User can update profile picture
+- [ ] AI API for Moderation
 
 **Optional Nice-to-have Stories**
 
