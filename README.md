@@ -49,28 +49,27 @@ Community-based social media app. Could be used to meet new people with similar 
 
 * Login 
 * Register - User signs up or logs into their account
-   * New users are redirected to the join/create community page
-   * Existing users are redirected to their primary community feed after login
+   - [X] New users are redirected to the join/create community page
+   - [ ] Existing users are redirected to their primary community feed after login
 * Join/Create Community
-   * Users can either join or create a new community if it does not exist. This community becomes their primary community
+   - [ ] Users can either join or create a new community if it does not exist. This community becomes their primary community
 * Profile Screen 
-   * Allows user to upload a photo and fill in required information
-   * Allows user to select their primary community
-   * Settings
+   - [ ] Allows user to upload a photo and fill in required information
+   - [ ] Allows user to select their primary community
+   - [ ] Settings
 * Community feed
-   * Allows user to view posts from other memebers of the community
-   * Allows user to edit their own posts
-   * Browse Communities
+   - [ ] Allows user to view posts from other memebers of the community
+   - [ ] Allows user to edit their own posts
+   - [ ] Browse Communities
 * Detail View
-    * Can comment on posts and reply to other comments
-    * 
+   - [ ] Can comment on posts and reply to other comments
 * Create Post
-    * Allows user to create post
+    - [ ] Allows user to create post
 * Settings Screen
-   * Lets people change app notification settings.
+    - [ ] Lets people change app notification settings.
 * Events (Mixes)
-    * Allows users to see list of events (mixes) involving their communities.
-    * Owner of community can create or close events (mixes).
+    - [ ] Allows users to see list of events (mixes) involving their communities.
+    - [ ] Owner of community can create or close events (mixes).
 
 ### 3. Navigation
 
