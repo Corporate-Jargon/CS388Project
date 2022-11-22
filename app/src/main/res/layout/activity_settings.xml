@@ -39,10 +39,30 @@
         android:id="@+id/sw_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="72dp"
         android:text=""
-        app:layout_constraintStart_toEndOf="@+id/tv_notification"
+        app:layout_constraintStart_toEndOf="@+id/tv_filter"
+        app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
+
+    <TextView
+        android:id="@+id/tv_accessibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:text="Accessibility"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_filter" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/sw_accessibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="188dp"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@+id/tv_accessibility"
         app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
