@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.parse.ParseUser
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings){
-            val intent = Intent(this@MainActivity, SettingActivity::class.java)
+            val intent = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
