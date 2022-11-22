@@ -7,7 +7,9 @@ import com.parse.ParseObject
 class MxerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-//        ParseObject.registerSubclass(Post::class.java)
+        ParseObject.registerSubclass(Post::class.java)
+        ParseObject.registerSubclass(Community::class.java)
+        ParseObject.registerSubclass(Comment::class.java)
         Parse.initialize(
             Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id))
