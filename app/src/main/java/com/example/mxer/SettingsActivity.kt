@@ -10,11 +10,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.example.mxer.fragments.NoticeDialogFragment
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.parse.ParseUser
 import kotlinx.coroutines.NonCancellable.cancel
 import kotlinx.coroutines.NonCancellable.start
 import org.apache.commons.io.FileUtils
@@ -32,6 +35,8 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     lateinit var pushSwitch: SwitchMaterial
     lateinit var filterSwitch: SwitchMaterial
     lateinit var accessibleSwitch: SwitchMaterial
+    lateinit var saveBtn: Button
+    lateinit var logoutBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,8 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
         pushSwitch = findViewById(R.id.sw_notification)
         filterSwitch = findViewById(R.id.sw_filter)
         accessibleSwitch = findViewById(R.id.sw_accessibility)
+        saveBtn = findViewById(R.id.btn_save)
+        logoutBtn = findViewById(R.id.btn_logout)
 
         // Load all the toggles to the appropriate values
         pushSwitch.isChecked = listOfNums[Setting.PUSH.pos].toBoolean()
@@ -52,7 +59,6 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
         pushSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
             listOfNums[Setting.PUSH.pos] = isChecked.toString()
             // Make push notifications also isChecked
-            saveItems()
         }
         filterSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
 //            listOfNums[Setting.FILTER.pos] = isChecked.toString()
@@ -61,12 +67,16 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
             }
             // Make profanity filter also isChecked
             // It would have a threshold of 75%
-            saveItems()
         }
         accessibleSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
             listOfNums[Setting.ACCESSIBILITY.pos] = isChecked.toString()
             // Make accessibility also isChecked
+        }
+        saveBtn.setOnClickListener {
             saveItems()
+        }
+        logoutBtn.setOnClickListener {
+            logoutUser()
         }
     }
     fun getDataFile(): File {
@@ -86,6 +96,7 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     fun saveItems() {
         try {
             FileUtils.writeLines(getDataFile(), listOfNums)
+            Toast.makeText(this, "Saved settings!", Toast.LENGTH_SHORT).show()
         } catch (ioException: IOException) {
             ioException.printStackTrace()
         }
@@ -121,7 +132,21 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.confirmation))
             .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick(DialogFragment()) }
-            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(DialogFragment()) }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
+                DialogFragment()
+            ) }
             .show()
+    }
+    fun logoutUser() {
+        ParseUser.logOut()
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+        val currentUser = ParseUser.getCurrentUser() // this will now be null
+        goToLoginActivity()
+    }
+    fun goToLoginActivity() {
+        val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
+        startActivity(intent)
+        // End app after using back button by closing this activity
+        finish()
     }
 }
