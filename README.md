@@ -5,6 +5,7 @@
 1. [Product Spec](#Product-Spec)
 1. [Wireframes](#Wireframes)
 1. [Schema](#Schema)
+1. [Sprint 1](#Sprint-1)
 
 ## Overview
 ### Description
@@ -298,3 +299,9 @@ Optional:
    HTTP Verb | Endpoint | Description
    ----------|----------|------------
     `POST`    | /comments:analyze | get the toxicity probability
+#### Sprint 1
+<img src="https://github.com/Corporate-Jargon/Mxer/blob/master/Peek%202022-11-21%2019-41.gif"></img>
+- [X] Newly registered users are redirected to the create/join community page.
+- [X] User logs in and is redirected to their primary community's page
+- [X] Design tables in Parse
+- [X] Design Login and Register Pages
