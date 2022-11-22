@@ -2,15 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mxer">
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <queries>
+
         <!-- Camera -->
         <intent>
             <action android:name="android.media.action.IMAGE_CAPTURE" />
         </intent>
     </queries>
+
     <application
         android:name=".MxerApplication"
         android:allowBackup="true"
@@ -22,6 +25,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS388Project"
         tools:targetApi="31">
+        <activity
+            android:name=".SettingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <meta-data
             android:name="com.parse.SERVER_URL"
             android:value="@string/back4app_server_url" />
@@ -31,6 +42,7 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="@string/parse_client_key" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -39,6 +51,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -53,12 +66,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-        <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
+        </activity> <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.codepath.mxer.fileprovider"

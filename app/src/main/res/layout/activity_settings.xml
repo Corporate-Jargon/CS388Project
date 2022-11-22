@@ -3,46 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
 
 
-    <TextView
-        android:id="@+id/tv_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="100dp"
-        android:text="Push"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/sw_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="100dp"
-        android:text=""
-        app:layout_constraintStart_toEndOf="@+id/tv_notification"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="100dp"
-        android:text="Profanity Filter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_notification" />
-
-    <Switch
-        android:id="@+id/sw_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="104dp"
-        android:text=""
-        app:layout_constraintStart_toEndOf="@+id/tv_notification"
-        app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
 </androidx.constraintlayout.widget.ConstraintLayout>
