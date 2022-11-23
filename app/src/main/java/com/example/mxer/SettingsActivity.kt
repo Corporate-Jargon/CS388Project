@@ -123,6 +123,43 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
         filterSwitch.isChecked = listOfNums[Setting.FILTER.pos].toBoolean()
 
     }
+    fun onDialogPositiveClick1(dialog: DialogFragment) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick2(DialogFragment()) }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
+                DialogFragment()
+            ) }
+            .show()
+
+    }fun onDialogPositiveClick2(dialog: DialogFragment) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick3(DialogFragment()) }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
+                DialogFragment()
+            ) }
+            .show()
+
+    }fun onDialogPositiveClick3(dialog: DialogFragment) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick4(DialogFragment()) }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
+                DialogFragment()
+            ) }
+            .show()
+
+    }fun onDialogPositiveClick4(dialog: DialogFragment) {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.yeah)) { _,_ -> onDialogPositiveClick(DialogFragment()) }
+            .setNegativeButton(getString(R.string.maybe)) { _,_ -> onDialogNegativeClick(
+                DialogFragment()
+            ) }
+            .show()
+
+    }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         listOfNums[Setting.FILTER.pos] = "false"
@@ -131,7 +168,7 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     fun showDialog(){
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick(DialogFragment()) }
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick1(DialogFragment()) }
             .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
                 DialogFragment()
             ) }
