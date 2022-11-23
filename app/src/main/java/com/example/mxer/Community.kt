@@ -39,6 +39,10 @@ class Community: ParseObject() {
     fun setMxe2(id: String) {
         put(KEY_EVENT2, id)
     }
+    //TODO Delete function below once feed is fleshed out
+    fun setId(id: String) {
+        put(KEY_ID, id)
+    }
     companion object {
         const val KEY_ID = "objectId"
         const val KEY_NAME = "name"
