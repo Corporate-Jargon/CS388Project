@@ -6,4 +6,14 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="Home" />
+    <item
+        android:id="@+id/action_event"
+        android:icon="@drawable/ic_baseline_event_24"
+        android:title="Events"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="Profile"
+        app:showAsAction="always" />
 </menu>
