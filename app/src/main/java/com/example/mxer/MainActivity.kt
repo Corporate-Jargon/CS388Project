@@ -9,11 +9,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.apache.commons.io.FileUtils
+import java.io.File
+import java.io.IOException
+import java.nio.charset.Charset
 
 class MainActivity : AppCompatActivity() {
+    var listOfNums = mutableListOf<String>("true","true","true","true")
+var filterSetting: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+if (File(filesDir, "settings.txt").exists()){
+    loadItems()
+    filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
+} else {
+    filterSetting = true
+}
         val fragmentManager: FragmentManager = supportFragmentManager
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             // Alias
@@ -52,5 +64,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+    fun getDataFile(): File {
+        // Every line is going to represent a specific task in our list of tasks
+        return File(filesDir, "settings.txt")
+    }
+    // Load the items by reading every line in the data file
+    fun loadItems() {
+        try {
+            listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+
+        }
     }
 }
