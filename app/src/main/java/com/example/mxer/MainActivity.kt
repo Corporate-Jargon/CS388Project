@@ -7,10 +7,11 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
+import com.example.mxer.fragments.CommunityFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.parse.ParseUser
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,5 +53,20 @@ class MainActivity : AppCompatActivity() {
             //startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun passCommunity(community: Community) {
+        //passes community id from browse to community view screen
+        val bundle = Bundle()
+        bundle.putString("CommunityId", community.getId())
+        bundle.putString("Name", community.getName())
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = CommunityFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
+    }
+
+    override fun passPost(post: Post) {
+        TODO("Not yet implemented")
     }
 }
