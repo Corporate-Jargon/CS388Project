@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mxer.Community
 import com.example.mxer.Post
 import com.example.mxer.PostsAdapter
 import com.example.mxer.R
@@ -43,17 +44,19 @@ class CommunityFragment : Fragment() {
         rvPosts.adapter = adapter
         rvPosts.layoutManager = LinearLayoutManager(requireContext())
 
-        //TODO make community name change based on the selected community
-        val communityName: String = ""
+        val bundle: Bundle = this.requireArguments()
+        val communityName: String = bundle.getString("Name","")
         view.findViewById<TextView>(R.id.tvCommTitle).text = communityName
-
-        queryPosts()
+        val communityId: String = bundle.getString("CommunityId","")
+        queryPosts(communityId)
     }
-    open fun queryPosts() {
+    open fun queryPosts(commId: String) {
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
         query.include(Post.KEY_AUTHOR)
         query.addDescendingOrder("createdAt")
         query.limit = 20
+        //TODO fix query so it only finds posts under the selected community
+        //query.whereEqualTo(Post.KEY_COMM, commId)
         query.findInBackground(object : FindCallback<Post>{
             override fun done(posts: MutableList<Post>?, e: ParseException?) {
                 if(e != null) {
