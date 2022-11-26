@@ -26,11 +26,13 @@
         android:id="@+id/sw_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="72dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toEndOf="@+id/tv_notification"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:thumbTint="#090000" />
 
     <TextView
         android:id="@+id/tv_filter"
@@ -51,11 +53,13 @@
         android:id="@+id/sw_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="96dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toEndOf="@+id/tv_filter"
-        app:layout_constraintTop_toBottomOf="@+id/sw_notification" />
+        app:layout_constraintTop_toBottomOf="@+id/sw_notification"
+        app:thumbTint="#090000" />
 
     <TextView
         android:id="@+id/tv_accessibility"
@@ -77,11 +81,13 @@
         android:id="@+id/sw_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="96dp"
         android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toEndOf="@+id/tv_accessibility"
-        app:layout_constraintTop_toBottomOf="@+id/sw_filter" />
+        app:layout_constraintTop_toBottomOf="@+id/sw_filter"
+        app:thumbTint="#090000" />
 
     <Button
         android:id="@+id/btn_save"
