@@ -13,6 +13,9 @@ import com.example.mxer.Post
 import com.example.mxer.R
 import com.parse.ParseFile
 import com.parse.ParseUser
+import okhttp3.Headers
+import okhttp3.RequestBody
+import org.json.JSONObject
 import java.io.File
 
 
@@ -29,7 +32,42 @@ open class ComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
+        fun postAPI(string: String): Double {
+            val requestHeaders = RequestHeaders()
+            val params = RequestParams()
+            val api_key = getString(R.string.perspective_key)
 
+            params["key"] = api_key
+            val client = AsyncHttpClient()
+            val jsonObject = JSONObject("{\"comment\": {\"text\": \"$string\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
+            val body = jsonObject.toString()
+            val mediaType = "application/json".toMediaType()
+            val requestBody = RequestBody.create(mediaType, body)
+
+            var toxiccode = -1.0
+            client.post(
+                "https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze",
+                requestHeaders,
+                params,
+                requestBody,
+                object : JsonHttpResponseHandler() {
+                    override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
+                        toxiccode = json.jsonObject.getJSONObject("attributeScores")
+                            .getJSONObject("TOXICITY")
+                            .getJSONObject("summaryScore")["value"].toString().toDouble()
+                    }
+
+                    override fun onFailure(
+                        statusCode: Int,
+                        headers: Headers,
+                        response: String,
+                        throwable: Throwable
+                    ) {
+                        Log.d("DEBUG", response)
+                    }
+                })
+            return toxiccode
+        }
 
         // Send a post object to our Parse server
         fun submitPost(description: String, user: ParseUser, file: File) {
