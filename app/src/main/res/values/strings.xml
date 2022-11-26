@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">MXER</string>
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
