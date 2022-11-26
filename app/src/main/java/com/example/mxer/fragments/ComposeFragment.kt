@@ -17,7 +17,11 @@ import okhttp3.Headers
 import okhttp3.RequestBody
 import org.json.JSONObject
 import java.io.File
-
+import com.codepath.asynchttpclient.AsyncHttpClient
+import com.codepath.asynchttpclient.RequestHeaders
+import com.codepath.asynchttpclient.RequestParams
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import okhttp3.MediaType.Companion.toMediaType
 
 open class ComposeFragment : Fragment() {
 
@@ -32,6 +36,7 @@ open class ComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
+
         fun postAPI(string: String): Double {
             val requestHeaders = RequestHeaders()
             val params = RequestParams()
@@ -70,16 +75,12 @@ open class ComposeFragment : Fragment() {
         }
 
         // Send a post object to our Parse server
-        fun submitPost(description: String, user: ParseUser, file: File) {
-            // Create the Post object
-            // on some click or some loading we need to wait for...
-            // on some click or some loading we need to wait for...
+        fun submitPost(description: String, user: ParseUser) {
             val pb = view.findViewById<View>(R.id.pbLoading) as ProgressBar
             pb.visibility = ProgressBar.VISIBLE
             val post = Post()
-            post.setDescription(description)
-            post.setUser(user)
-            post.setImage(ParseFile(file))
+            post.setDesc(description)
+            post.setAuthor(user)
             post.saveInBackground { exception ->
                 if (exception != null) {
                     Log.e(MainActivity.TAG, "Error while saving post")
@@ -89,31 +90,24 @@ open class ComposeFragment : Fragment() {
                 } else {
                     Log.i(MainActivity.TAG, "Successfully saved post")
                     // Reset views
-                    view.findViewById<EditText>(R.id.description).setText("")
-                    view.findViewById<ImageView>(R.id.imageView).setImageBitmap(null)
-
+                    view.findViewById<EditText>(R.id.etPost).setText("")
                 }
                 pb.visibility = ProgressBar.INVISIBLE
             }
-        }
-        // Set description of post
-        // Button to launch camera for picture
-        // Image to show the picture
-        // A button to save and send the post
-        view.findViewById<Button>(R.id.btnSubmit).setOnClickListener {
-
         }
 
         view.findViewById<Button>(R.id.btnPost).setOnClickListener {
             // Get description
             val description = view.findViewById<EditText>(R.id.etPost).text.toString()
             val user = ParseUser.getCurrentUser()
-            if (photoFile != null) {
+            val score = postAPI(description)
+            val threshold = 0.75
+            if (score > threshold) {
                 // Double exclamation points mean file is guaranteed not to be null
-                submitPost(description, user, photoFile!!)
+                submitPost(description, user)
             } else {
-                Log.e(MainActivity.TAG, "Error getting picture")
-                Toast.makeText(requireContext(), "Take a picture!", Toast.LENGTH_SHORT).show()
+                Log.e(MainActivity.TAG, "Error submiting post from toxicity")
+                Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
             }
             //TODO make sure user is returned to the proper feed
             val fragmentToShow = CommunityFragment()
