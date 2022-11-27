@@ -111,10 +111,12 @@ open class ComposeFragment : Fragment() {
                 Log.e(MainActivity.TAG, "Error submiting post from toxicity")
                 Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
             }
-            //TODO currently hard-coded
+            val bundle: Bundle = this.requireArguments()
+            val communityName: String = bundle.getString("Name","")
+            val communityId: String = bundle.getString("CommunityId","")
             val community = Community()
-            community.setId("9cNAL0Ynrh")
-            community.setName("Art")
+            community.setId(communityId)
+            community.setName(communityName)
             communicator.passCommunity(community)
         }
     }

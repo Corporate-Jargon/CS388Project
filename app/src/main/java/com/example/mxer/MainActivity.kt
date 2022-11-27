@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
 import com.example.mxer.fragments.CommunityFragment
+import com.example.mxer.fragments.ComposeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), Communicator {
@@ -61,6 +62,17 @@ class MainActivity : AppCompatActivity(), Communicator {
         bundle.putString("Name", community.getName())
         val transaction = this.supportFragmentManager.beginTransaction()
         val fragment = CommunityFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
+    }
+
+    override fun passCompose(community: Community) {
+        //passes community id from community view to compose screen
+        val bundle = Bundle()
+        bundle.putString("CommunityId", community.getId())
+        bundle.putString("Name", community.getName())
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = ComposeFragment()
         fragment.arguments = bundle
         transaction.replace(R.id.flContainer, fragment).commit()
     }

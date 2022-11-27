@@ -10,9 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mxer.Post
-import com.example.mxer.PostsAdapter
-import com.example.mxer.R
+import com.example.mxer.*
 import com.parse.FindCallback
 import com.parse.ParseException
 import com.parse.ParseQuery
@@ -20,6 +18,7 @@ import com.parse.ParseQuery
 open class CommunityFragment: Fragment() {
     lateinit var rvPosts: RecyclerView
     lateinit var adapter: PostsAdapter
+    lateinit var communicator: Communicator
     val allPosts = ArrayList<Post>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +30,7 @@ open class CommunityFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
-        view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose).setOnClickListener{
-            val fragmentToShow = ComposeFragment()
-            fragmentManager.beginTransaction().replace(R.id.flContainer, fragmentToShow).commit()
-        }
+        communicator = activity as Communicator
         rvPosts = view.findViewById(R.id.rvPosts)
         adapter = PostsAdapter(requireContext(), allPosts)
         rvPosts.adapter = adapter
@@ -44,6 +40,12 @@ open class CommunityFragment: Fragment() {
         val communityName: String = bundle.getString("Name","")
         view.findViewById<TextView>(R.id.tvCommTitle).text = communityName
         val communityId: String = bundle.getString("CommunityId","")
+        view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose).setOnClickListener{
+            val community = Community()
+            community.setId(communityId)
+            community.setName(communityName)
+            communicator.passCompose(community)
+        }
         queryPosts(communityId)
     }
     open fun queryPosts(commId: String) {
