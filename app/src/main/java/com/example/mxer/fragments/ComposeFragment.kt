@@ -8,9 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentManager
-import com.example.mxer.MainActivity
-import com.example.mxer.Post
-import com.example.mxer.R
 import com.parse.ParseFile
 import com.parse.ParseUser
 import okhttp3.Headers
@@ -21,10 +18,11 @@ import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestHeaders
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import com.example.mxer.*
 import okhttp3.MediaType.Companion.toMediaType
 
 open class ComposeFragment : Fragment() {
-
+    private lateinit var communicator: Communicator
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,7 +95,7 @@ open class ComposeFragment : Fragment() {
                 pb.visibility = ProgressBar.INVISIBLE
             }
         }
-
+        communicator = activity as Communicator
         view.findViewById<Button>(R.id.btnPost).setOnClickListener {
             // Get description
             val description = view.findViewById<EditText>(R.id.etPost).text.toString()
@@ -113,10 +111,11 @@ open class ComposeFragment : Fragment() {
                 Log.e(MainActivity.TAG, "Error submiting post from toxicity")
                 Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
             }
-            //TODO make sure user is returned to the proper feed
-
-            val fragmentToShow = BrowseFragment()
-            fragmentManager.beginTransaction().replace(R.id.flContainer,fragmentToShow).commit()
+            //TODO currently hard-coded
+            val community = Community()
+            community.setId("9cNAL0Ynrh")
+            community.setName("Art")
+            communicator.passCommunity(community)
         }
     }
 }
