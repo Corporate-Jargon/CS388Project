@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/tangerine"
-    tools:context=".MainActivity">
+    tools:context=".fragments.ComposeFragment">
 
     <EditText
         android:id="@+id/etPost"

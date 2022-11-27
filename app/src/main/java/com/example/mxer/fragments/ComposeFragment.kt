@@ -57,9 +57,10 @@ open class ComposeFragment : Fragment() {
                 requestBody,
                 object : JsonHttpResponseHandler() {
                     override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
+                        Log.d("DEBUG", json.toString())
                         toxiccode = json.jsonObject.getJSONObject("attributeScores")
                             .getJSONObject("TOXICITY")
-                            .getJSONObject("summaryScore")["value"].toString().toDouble()
+                            .getJSONObject("summaryScore")["value"] as Double
                     }
 
                     override fun onFailure(
@@ -71,6 +72,7 @@ open class ComposeFragment : Fragment() {
                         Log.d("DEBUG", response)
                     }
                 })
+            Log.i("DEBUG", toxiccode.toString())
             return toxiccode
         }
 
@@ -101,8 +103,10 @@ open class ComposeFragment : Fragment() {
             val description = view.findViewById<EditText>(R.id.etPost).text.toString()
             val user = ParseUser.getCurrentUser()
             val score = postAPI(description)
+
             val threshold = 0.75
-            if (score > threshold) {
+            Log.i("DEBUG", score.toString())
+            if (score < threshold) {
                 // Double exclamation points mean file is guaranteed not to be null
                 submitPost(description, user)
             } else {
@@ -110,7 +114,8 @@ open class ComposeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
             }
             //TODO make sure user is returned to the proper feed
-            val fragmentToShow = CommunityFragment()
+
+            val fragmentToShow = BrowseFragment()
             fragmentManager.beginTransaction().replace(R.id.flContainer,fragmentToShow).commit()
         }
     }
