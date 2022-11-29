@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
+import com.example.mxer.fragments.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -39,9 +40,9 @@ if (File(filesDir, "settings.txt").exists()){
 //                    // Set it to the fragment we want to show
 //                    fragmentToShow = ComposeFragment()
 //                }
-//                R.id.action_profile -> {
-//                    fragmentToShow = ProfileFragment()
-//                }
+                R.id.action_profile -> {
+                    fragmentToShow = ProfileFragment()
+                }
             }
             if (fragmentToShow != null) {
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragmentToShow).commit()
