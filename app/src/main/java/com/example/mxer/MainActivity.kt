@@ -1,5 +1,6 @@
 package com.example.mxer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,15 +10,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
+import com.example.mxer.fragments.ProfileFragment
 import com.example.mxer.fragments.CommunityFragment
 import com.example.mxer.fragments.ComposeFragment
 import com.example.mxer.fragments.PostFragment
+import org.apache.commons.io.FileUtils
+import java.io.File
+import java.io.IOException
+import java.nio.charset.Charset
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), Communicator {
+    var listOfNums = mutableListOf<String>("true","true","true","true")
+    var filterSetting: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (File(filesDir, "settings.txt").exists()){
+            loadItems()
+            filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
+        } else {
+            filterSetting = true
+        }
         val fragmentManager: FragmentManager = supportFragmentManager
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             // Alias
@@ -31,9 +45,9 @@ class MainActivity : AppCompatActivity(), Communicator {
 //                    // Set it to the fragment we want to show
 //                    fragmentToShow = ComposeFragment()
 //                }
-//                R.id.action_profile -> {
-//                    fragmentToShow = ProfileFragment()
-//                }
+                R.id.action_profile -> {
+                    fragmentToShow = ProfileFragment()
+                }
             }
             if (fragmentToShow != null) {
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragmentToShow).commit()
@@ -56,6 +70,20 @@ class MainActivity : AppCompatActivity(), Communicator {
             //startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun getDataFile(): File {
+        // Every line is going to represent a specific task in our list of tasks
+        return File(filesDir, "settings.txt")
+    }
+    // Load the items by reading every line in the data file
+    fun loadItems() {
+        try {
+            listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+
+        }
     }
 
     override fun passCommunity(community: Community) {
