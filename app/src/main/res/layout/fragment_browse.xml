@@ -167,4 +167,5 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commimage4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

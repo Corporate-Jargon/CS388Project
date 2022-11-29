@@ -1,13 +1,20 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.example.mxer.Communicator
+import com.example.mxer.Community
 import com.example.mxer.R
 
-class BrowseFragment : Fragment() {
+open class BrowseFragment : Fragment() {
+    private lateinit var communicator: Communicator
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -18,5 +25,18 @@ class BrowseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val fragmentManager: FragmentManager = parentFragmentManager
+        communicator = activity as Communicator
+        view.findViewById<ImageView>(R.id.commimage1).setOnClickListener {
+            //TODO change so it takes the community at adapter position
+            //val community: Community = RecyclerView[adapterPosition]
+            val community = Community()
+            community.setId("9cNAL0Ynrh")
+            community.setName("Art")
+            communicator.passCommunity(community)
+        }
+    }
+    companion object {
+        const val TAG = "BrowseFragment"
     }
 }

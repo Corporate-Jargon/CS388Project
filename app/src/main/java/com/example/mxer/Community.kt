@@ -1,12 +1,50 @@
 package com.example.mxer
 
 import com.parse.ParseClassName
+import com.parse.ParseFile
 import com.parse.ParseObject
 
 @ParseClassName("Community")
 class Community: ParseObject() {
-
+    fun getId(): String? {
+        return getString(KEY_ID)
+    }
+    fun getName(): String? {
+        return getString(KEY_NAME)
+    }
+    fun setName(name: String) {
+        put(KEY_NAME, name)
+    }
+    fun getIcon(): ParseFile? {
+        return getParseFile(KEY_ICON)
+    }
+    fun setIcon(icon: ParseFile) {
+        put(KEY_ICON, icon)
+    }
+    fun getDesc(): String? {
+        return getString(KEY_DESC)
+    }
+    fun setDesc(desc: String) {
+        put(KEY_NAME, desc)
+    }
+    fun getMxe1(): String? {
+        return getString(KEY_EVENT1)
+    }
+    fun setMxe1(id: String) {
+        put(KEY_EVENT1, id)
+    }
+    fun getMxe2(): String? {
+        return getString(KEY_EVENT2)
+    }
+    fun setMxe2(id: String) {
+        put(KEY_EVENT2, id)
+    }
+    //TODO Delete function below once feed is fleshed out
+    fun setId(id: String) {
+        put(KEY_ID, id)
+    }
     companion object {
+        const val KEY_ID = "objectId"
         const val KEY_NAME = "name"
         const val KEY_ICON = "icon"
         const val KEY_DESC = "description"

@@ -1,32 +1,37 @@
 package com.example.mxer
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
 import com.example.mxer.fragments.ProfileFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.mxer.fragments.CommunityFragment
+import com.example.mxer.fragments.ComposeFragment
+import com.example.mxer.fragments.PostFragment
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
-var filterSetting: Boolean = true
+    var filterSetting: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-if (File(filesDir, "settings.txt").exists()){
-    loadItems()
-    filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
-} else {
-    filterSetting = true
-}
+        if (File(filesDir, "settings.txt").exists()){
+            loadItems()
+            filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
+        } else {
+            filterSetting = true
+        }
         val fragmentManager: FragmentManager = supportFragmentManager
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             // Alias
@@ -52,8 +57,8 @@ if (File(filesDir, "settings.txt").exists()){
         }
         // Set default selection
         findViewById<BottomNavigationView>(R.id.bottom_navigation).selectedItemId = R.id.action_home
-
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_settings, menu)
         return true
@@ -66,6 +71,7 @@ if (File(filesDir, "settings.txt").exists()){
         }
         return super.onOptionsItemSelected(item)
     }
+
     fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
         return File(filesDir, "settings.txt")
@@ -78,5 +84,39 @@ if (File(filesDir, "settings.txt").exists()){
             ioException.printStackTrace()
 
         }
+    }
+
+    override fun passCommunity(community: Community) {
+        //passes community id from browse to community view screen
+        val bundle = Bundle()
+        bundle.putString("CommunityId", community.getId())
+        bundle.putString("Name", community.getName())
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = CommunityFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
+    }
+
+    override fun passCompose(community: Community) {
+        //passes community id from community view to compose screen
+        val bundle = Bundle()
+        bundle.putString("CommunityId", community.getId())
+        bundle.putString("Name", community.getName())
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = ComposeFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
+    }
+
+    override fun passPost(post: Post) {
+        val bundle = Bundle()
+        bundle.putString("PostId", post.objectId)
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = PostFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
+    }
+    companion object {
+        const val TAG = "MainActivity"
     }
 }
