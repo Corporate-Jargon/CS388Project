@@ -1,14 +1,19 @@
 package com.example.mxer
 
+import com.parse.Parse
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
 import org.json.JSONObject
+import java.sql.Date
 
 
 @ParseClassName("Post")
 class Post : ParseObject() {
+    fun getId(): String?{
+        return getString(KEY_ID)
+    }
     fun getAuthor(): ParseUser? {
         return getParseUser(KEY_AUTHOR)
     }
@@ -40,13 +45,12 @@ class Post : ParseObject() {
         put(KEY_COMM, obj)
     }
 
-
     companion object {
+        const val KEY_ID = "objectId"
         const val KEY_AUTHOR = "author"
         const val KEY_IMAGE = "image"
         const val KEY_DESC = "description"
         const val KEY_PROFANE = "profane"
         const val KEY_COMM = "community"
-
     }
 }

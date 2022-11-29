@@ -1,6 +1,7 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,12 +30,13 @@ open class BrowseFragment : Fragment() {
         view.findViewById<ImageView>(R.id.commimage1).setOnClickListener {
             //TODO change so it takes the community at adapter position
             //val community: Community = RecyclerView[adapterPosition]
-
             val community = Community()
             community.setId("9cNAL0Ynrh")
             community.setName("Art")
-
             communicator.passCommunity(community)
         }
+    }
+    companion object {
+        const val TAG = "BrowseFragment"
     }
 }

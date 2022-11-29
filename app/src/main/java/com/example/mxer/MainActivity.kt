@@ -1,14 +1,17 @@
 package com.example.mxer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.BrowseFragment
 import com.example.mxer.fragments.CommunityFragment
 import com.example.mxer.fragments.ComposeFragment
+import com.example.mxer.fragments.PostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), Communicator {
@@ -78,7 +81,12 @@ class MainActivity : AppCompatActivity(), Communicator {
     }
 
     override fun passPost(post: Post) {
-        TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putString("PostId", post.objectId)
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = PostFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
     }
     companion object {
         const val TAG = "MainActivity"

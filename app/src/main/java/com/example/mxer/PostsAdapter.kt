@@ -1,6 +1,8 @@
 package com.example.mxer
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +11,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import java.sql.Date
 
 class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
-
-
+    private lateinit var communicator: Communicator
+    private val TAG = "PostsAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -38,7 +41,7 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
         notifyDataSetChanged()
     }
 
-    fun getRelativeTimeAgo(rawJsonDate: String): String{
+    fun getRelativeTimeAgo(parseDate: java.util.Date): String{
         //TODO add logic
         return ""
     }
@@ -54,7 +57,7 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
 
         fun bind(post: Post){
             tvAuthor.text = post.getAuthor()?.username
-            tvTimestamp.text = getRelativeTimeAgo(post.createdAt.toString())
+            tvTimestamp.text = getRelativeTimeAgo(post.createdAt)
             tvBody.text = post.getDesc()
             var options: RequestOptions = RequestOptions()
             options.centerCrop()
@@ -68,7 +71,13 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
 
         override fun onClick(v: View?) {
             val post = posts[adapterPosition]
-            //TODO use post to see detail view + comments
+            val test = post.objectId
+            if (test != null) {
+                Log.i(TAG, test)
+            }
+            val activity = context as Activity
+            communicator = activity as Communicator
+            communicator.passPost(post)
         }
     }
 }
