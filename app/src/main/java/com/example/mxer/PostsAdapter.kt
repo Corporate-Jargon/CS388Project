@@ -41,9 +41,27 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
         notifyDataSetChanged()
     }
 
-    fun getRelativeTimeAgo(parseDate: java.util.Date): String{
-        //TODO add logic
-        return ""
+    fun getRelativeTimeAgo(string: String): String{
+        val createTime = java.util.Date(string)
+        val currentTime = java.util.Date()
+        val diff = currentTime.time - createTime.time
+        currentTime.toString()
+
+        val d = (1000 * 24 * 60 * 60).toLong()
+        val h = (1000 * 60 * 60).toLong()
+        val m = (1000 * 60).toLong()
+        val s = 1000.toLong()
+
+        val day = diff / d
+        val hour = diff % d / h
+        val min = diff % d % h / m
+//        val sec = diff % d % h % m / s
+
+        var time = ""
+        if (day > 0) time += "$day" + "d "
+        if (hour > 0) time += "$hour" + "h "
+        if (min > 0) time += "$min" + "m "
+        return time
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
@@ -57,7 +75,7 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
 
         fun bind(post: Post){
             tvAuthor.text = post.getAuthor()?.username
-            tvTimestamp.text = getRelativeTimeAgo(post.createdAt)
+            tvTimestamp.text = getRelativeTimeAgo((post.createdAt).toString())
             tvBody.text = post.getDesc()
             var options: RequestOptions = RequestOptions()
             options.centerCrop()
