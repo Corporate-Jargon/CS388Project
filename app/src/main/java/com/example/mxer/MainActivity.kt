@@ -102,6 +102,8 @@ class MainActivity : AppCompatActivity(), Communicator {
         val bundle = Bundle()
         bundle.putString("CommunityId", community.getId())
         bundle.putString("Name", community.getName())
+        //TODO read from list of nums instead of hard-coded value
+        bundle.putString("ProfanityFilter", "true")
         val transaction = this.supportFragmentManager.beginTransaction()
         val fragment = ComposeFragment()
         fragment.arguments = bundle

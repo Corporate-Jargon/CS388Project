@@ -22,6 +22,7 @@ import com.example.mxer.*
 import okhttp3.MediaType.Companion.toMediaType
 
 open class ComposeFragment : Fragment() {
+    var score: Double = -1.0
     private lateinit var communicator: Communicator
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +60,7 @@ open class ComposeFragment : Fragment() {
                         toxiccode = json.jsonObject.getJSONObject("attributeScores")
                             .getJSONObject("TOXICITY")
                             .getJSONObject("summaryScore")["value"] as Double
+                        score = toxiccode
                     }
 
                     override fun onFailure(
@@ -100,7 +102,8 @@ open class ComposeFragment : Fragment() {
             // Get description
             val description = view.findViewById<EditText>(R.id.etPost).text.toString()
             val user = ParseUser.getCurrentUser()
-            val score = postAPI(description)
+            //TODO make sure to prevent race condition
+            postAPI(description)
 
             val threshold = 0.75
             Log.i("DEBUG", score.toString())
