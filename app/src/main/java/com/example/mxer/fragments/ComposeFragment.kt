@@ -1,6 +1,7 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.example.mxer.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 open class ComposeFragment : Fragment() {
     var score: Double = -1.0
@@ -36,7 +38,7 @@ open class ComposeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
 
-        fun postAPI(string: String): Double {
+        fun postAPI(string: String) {
             val requestHeaders = RequestHeaders()
             val params = RequestParams()
             val api_key = getString(R.string.perspective_key)
@@ -46,7 +48,7 @@ open class ComposeFragment : Fragment() {
             val jsonObject = JSONObject("{\"comment\": {\"text\": \"$string\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
             val body = jsonObject.toString()
             val mediaType = "application/json".toMediaType()
-            val requestBody = RequestBody.create(mediaType, body)
+            val requestBody = body.toRequestBody(mediaType)
 
             var toxiccode = -1.0
             client.post(
@@ -60,7 +62,10 @@ open class ComposeFragment : Fragment() {
                         toxiccode = json.jsonObject.getJSONObject("attributeScores")
                             .getJSONObject("TOXICITY")
                             .getJSONObject("summaryScore")["value"] as Double
+                        Log.i("DEBUG", toxiccode.toString())
                         score = toxiccode
+                        Log.i("DEBUG","incall")
+
                     }
 
                     override fun onFailure(
@@ -72,8 +77,6 @@ open class ComposeFragment : Fragment() {
                         Log.d("DEBUG", response)
                     }
                 })
-            Log.i("DEBUG", toxiccode.toString())
-            return toxiccode
         }
 
         // Send a post object to our Parse server
@@ -104,14 +107,14 @@ open class ComposeFragment : Fragment() {
             val user = ParseUser.getCurrentUser()
             //TODO make sure to prevent race condition
             postAPI(description)
-
+Log.i("DEBUG","outcall")
             val threshold = 0.75
             Log.i("DEBUG", score.toString())
             if (score < threshold) {
                 // Double exclamation points mean file is guaranteed not to be null
                 submitPost(description, user)
             } else {
-                Log.e(MainActivity.TAG, "Error submiting post from toxicity")
+                Log.e(MainActivity.TAG, "Error submitting post from toxicity")
                 Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
             }
             val bundle: Bundle = this.requireArguments()

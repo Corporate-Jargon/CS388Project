@@ -19,6 +19,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.parse.ParseUser
 
 class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
@@ -26,7 +27,8 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (File(filesDir, "settings.txt").exists()){
+        val username = ParseUser.getCurrentUser().username
+        if (File(filesDir, "settings${username}.txt").exists()){
             loadItems()
             filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
         } else {
@@ -74,9 +76,10 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
-        return File(filesDir, "settings.txt")
+        val username = ParseUser.getCurrentUser().username
+        return File(filesDir, "settings${username}.txt")
     }
-    // Load the items by reading every line in the data file
+//     Load the items by reading every line in the data file
     fun loadItems() {
         try {
             listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())

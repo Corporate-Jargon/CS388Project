@@ -44,7 +44,6 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
 
         loadItems()
 
-
         pushSwitch = findViewById(R.id.sw_notification)
         filterSwitch = findViewById(R.id.sw_filter)
         accessibleSwitch = findViewById(R.id.sw_accessibility)
@@ -110,8 +109,6 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_back){
             val intent = Intent(this@SettingsActivity, MainActivity::class.java)
-            loadItems()
-            intent.putExtra("filter", listOfNums[Setting.FILTER.pos].toBoolean())
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
