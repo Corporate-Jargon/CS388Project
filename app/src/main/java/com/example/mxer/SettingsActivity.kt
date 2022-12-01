@@ -61,10 +61,10 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
             // Make push notifications also isChecked
         }
         filterSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
-//            listOfNums[Setting.FILTER.pos] = isChecked.toString()
             if (isChecked) {
                 showDialog()
             }
+            if (!isChecked) listOfNums[Setting.FILTER.pos] = isChecked.toString()
             // Make profanity filter also isChecked
             // It would have a threshold of 75%
         }
@@ -81,7 +81,8 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     }
     fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
-        return File(filesDir, "settings.txt")
+        val username = ParseUser.getCurrentUser().username
+        return File(filesDir, "settings${username}.txt")
     }
     // Load the items by reading every line in the data file
     fun loadItems() {
@@ -109,6 +110,8 @@ class SettingsActivity : AppCompatActivity(), NoticeDialogFragment.NoticeDialogL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_back){
             val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+            loadItems()
+            intent.putExtra("filter", listOfNums[Setting.FILTER.pos].toBoolean())
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
