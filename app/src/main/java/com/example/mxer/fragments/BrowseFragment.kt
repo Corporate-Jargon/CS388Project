@@ -12,12 +12,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
-import com.example.mxer.Communicator
-import com.example.mxer.Community
-import com.example.mxer.R
+import com.example.mxer.*
+import com.parse.FindCallback
+import com.parse.ParseException
+import com.parse.ParseObject
+import com.parse.ParseQuery
 
 open class BrowseFragment : Fragment() {
     private lateinit var communicator: Communicator
+    lateinit var adapter: CommunityAdapter
+    var allCommunities: ArrayList<Community> = ArrayList<Community>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +39,29 @@ open class BrowseFragment : Fragment() {
         rvCommunities.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
+
+        adapter = CommunityAdapter(requireContext(), allCommunities)
+        rvCommunities.adapter = adapter
+
+        getCommunities()
+    }
+
+    fun getCommunities() {
+        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        query.findInBackground(object : FindCallback<Community> {
+            override fun done(communities: MutableList<Community>?, e: ParseException?) {
+                if(e != null) {
+                    Log.e(TAG, "Error fetching posts: ${e}")
+                } else {
+                    if(communities != null) {
+                        allCommunities.addAll(communities)
+                        Log.i(TAG, "Communities: ${allCommunities}")
+                        adapter.notifyDataSetChanged()
+
+                    }
+                }
+            }
+        })
     }
 
 

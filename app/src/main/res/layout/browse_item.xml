@@ -9,21 +9,27 @@
         android:id="@+id/tvName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:background="@color/tangerine"
         android:fontFamily="@font/kavoon_regular"
         android:text="Art"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="179dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="31dp" />
 
     <ImageView
         android:id="@+id/ivIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
-        app:srcCompat="@drawable/art"
-        tools:layout_editor_absoluteX="103dp" />
+        app:srcCompat="@drawable/art" />
 </androidx.constraintlayout.widget.ConstraintLayout>
