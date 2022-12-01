@@ -1,7 +1,6 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,12 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentManager
-import com.parse.ParseFile
 import com.parse.ParseUser
 import okhttp3.Headers
-import okhttp3.RequestBody
 import org.json.JSONObject
-import java.io.File
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestHeaders
 import com.codepath.asynchttpclient.RequestParams
@@ -38,14 +34,14 @@ open class ComposeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
 
-        fun postAPI(string: String) {
+        fun postAPI(description: String, user: ParseUser) {
             val requestHeaders = RequestHeaders()
             val params = RequestParams()
             val api_key = getString(R.string.perspective_key)
 
             params["key"] = api_key
             val client = AsyncHttpClient()
-            val jsonObject = JSONObject("{\"comment\": {\"text\": \"$string\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
+            val jsonObject = JSONObject("{\"comment\": {\"text\": \"$description\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
             val body = jsonObject.toString()
             val mediaType = "application/json".toMediaType()
             val requestBody = body.toRequestBody(mediaType)
@@ -62,10 +58,24 @@ open class ComposeFragment : Fragment() {
                         toxiccode = json.jsonObject.getJSONObject("attributeScores")
                             .getJSONObject("TOXICITY")
                             .getJSONObject("summaryScore")["value"] as Double
-                        Log.i("DEBUG", toxiccode.toString())
                         score = toxiccode
-                        Log.i("DEBUG","incall")
 
+                        val bundle: Bundle = requireArguments()
+                        val communityName: String = bundle.getString("Name","")
+                        val communityId: String = bundle.getString("CommunityId","")
+                        val community = Community()
+                        community.setId(communityId)
+                        community.setName(communityName)
+
+                        val threshold = 0.75
+                        if (score < threshold) {
+                            submitPost(description, user, score)
+                        } else {
+                            Log.e(MainActivity.TAG, "Error submitting post from toxicity")
+                            Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
+                        }
+
+                        communicator.passCommunity(community)
                     }
 
                     override fun onFailure(
@@ -78,52 +88,37 @@ open class ComposeFragment : Fragment() {
                     }
                 })
         }
-
-        // Send a post object to our Parse server
-        fun submitPost(description: String, user: ParseUser) {
-            val pb = view.findViewById<View>(R.id.pbLoading) as ProgressBar
-            pb.visibility = ProgressBar.VISIBLE
-            val post = Post()
-            post.setDesc(description)
-            post.setAuthor(user)
-            post.saveInBackground { exception ->
-                if (exception != null) {
-                    Log.e(MainActivity.TAG, "Error while saving post")
-                    exception.printStackTrace()
-                    Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
-
-                } else {
-                    Log.i(MainActivity.TAG, "Successfully saved post")
-                    // Reset views
-                    view.findViewById<EditText>(R.id.etPost).setText("")
-                }
-                pb.visibility = ProgressBar.INVISIBLE
-            }
-        }
         communicator = activity as Communicator
         view.findViewById<Button>(R.id.btnPost).setOnClickListener {
             // Get description
             val description = view.findViewById<EditText>(R.id.etPost).text.toString()
             val user = ParseUser.getCurrentUser()
-            //TODO make sure to prevent race condition
-            postAPI(description)
-Log.i("DEBUG","outcall")
-            val threshold = 0.75
-            Log.i("DEBUG", score.toString())
-            if (score < threshold) {
-                // Double exclamation points mean file is guaranteed not to be null
-                submitPost(description, user)
+
+            // Double exclamation points mean file is guaranteed not to be null
+            postAPI(description, user)
+        }
+    }
+
+    // Send a post object to our Parse server
+    fun submitPost(description: String, user: ParseUser, score: Double) {
+        val pb = view?.findViewById<View>(R.id.pbLoading) as ProgressBar
+        pb.visibility = ProgressBar.VISIBLE
+        val post = Post()
+        post.setDesc(description)
+        post.setAuthor(user)
+        post.setProfane(score)
+        post.saveInBackground { exception ->
+            if (exception != null) {
+                Log.e(MainActivity.TAG, "Error while saving post")
+                exception.printStackTrace()
+                Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
+
             } else {
-                Log.e(MainActivity.TAG, "Error submitting post from toxicity")
-                Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
+                Log.i(MainActivity.TAG, "Successfully saved post")
+                // Reset views
+                view?.findViewById<EditText>(R.id.etPost)?.setText("")
             }
-            val bundle: Bundle = this.requireArguments()
-            val communityName: String = bundle.getString("Name","")
-            val communityId: String = bundle.getString("CommunityId","")
-            val community = Community()
-            community.setId(communityId)
-            community.setName(communityName)
-            communicator.passCommunity(community)
+            pb.visibility = ProgressBar.INVISIBLE
         }
     }
 }
