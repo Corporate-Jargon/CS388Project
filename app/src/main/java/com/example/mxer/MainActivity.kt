@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val username = ParseUser.getCurrentUser().username
-        if (File(filesDir, "settings${username}.txt").exists()){
+        if (getDataFile().exists()){
             loadItems()
             filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
         } else {
