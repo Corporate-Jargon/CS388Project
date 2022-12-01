@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.mxer.Communicator
 import com.example.mxer.Community
 import com.example.mxer.R
@@ -27,15 +30,14 @@ open class BrowseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
         communicator = activity as Communicator
-        view.findViewById<ImageView>(R.id.commimage1).setOnClickListener {
-            //TODO change so it takes the community at adapter position
-            //val community: Community = RecyclerView[adapterPosition]
-            val community = Community()
-            community.setId("9cNAL0Ynrh")
-            community.setName("Art")
-            communicator.passCommunity(community)
+
+        val rvCommunities = view.findViewById<RecyclerView>(R.id.rvCommunities)
+        rvCommunities.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
         }
     }
+
+
     companion object {
         const val TAG = "BrowseFragment"
     }

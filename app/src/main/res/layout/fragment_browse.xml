@@ -7,66 +7,6 @@
     android:background="@color/marigold"
     tools:context=".fragments.BrowseFragment">
 
-    <ImageView
-        android:id="@+id/commimage1"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/art"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm1" />
-
-    <ImageView
-        android:id="@+id/commimage5"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/clothes"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm5" />
-
-    <ImageView
-        android:id="@+id/commimage6"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:src="@drawable/code"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm6" />
-
-    <ImageView
-        android:id="@+id/commimage3"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/gaming"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm3" />
-
-    <ImageView
-        android:id="@+id/commimage2"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:src="@drawable/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm2" />
-
-    <ImageView
-        android:id="@+id/commimage4"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:src="@drawable/sports"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comm4" />
-
     <TextView
         android:id="@+id/browse_title"
         android:layout_width="match_parent"
@@ -84,88 +24,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/comm1"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Art"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/browse_title" />
-
-    <TextView
-        android:id="@+id/comm2"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Maps"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCommunities"
+        android:layout_width="409dp"
+        android:layout_height="664dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/browse_title" />
-
-    <TextView
-        android:id="@+id/comm3"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Gaming"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commimage1" />
-
-    <TextView
-        android:id="@+id/comm4"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Sports"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commimage2" />
-
-    <TextView
-        android:id="@+id/comm5"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Clothes"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commimage3" />
-
-    <TextView
-        android:id="@+id/comm6"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="36dp"
-        android:background="@color/tangerine"
-        android:fontFamily="@font/kavoon_regular"
-        android:text=" Crypto"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commimage4" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
