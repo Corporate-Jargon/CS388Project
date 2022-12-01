@@ -27,13 +27,13 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val username = ParseUser.getCurrentUser().username
         if (getDataFile().exists()){
             loadItems()
-            filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
         } else {
-            filterSetting = true
+            saveItems()
         }
+        filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
+
         val fragmentManager: FragmentManager = supportFragmentManager
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             // Alias
@@ -86,6 +86,13 @@ class MainActivity : AppCompatActivity(), Communicator {
         } catch (ioException: IOException) {
             ioException.printStackTrace()
 
+        }
+    }
+    fun saveItems() {
+        try {
+            FileUtils.writeLines(getDataFile(), listOfNums)
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
         }
     }
 
