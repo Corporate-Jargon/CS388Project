@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         bundle.putString("CommunityId", community.getId())
         bundle.putString("Name", community.getName())
         //TODO read from list of nums instead of hard-coded value
-        bundle.putString("ProfanityFilter", "true")
+        bundle.putString("ProfanityFilter", listOfNums[SettingsActivity.Setting.FILTER.pos])
         val transaction = this.supportFragmentManager.beginTransaction()
         val fragment = ComposeFragment()
         fragment.arguments = bundle

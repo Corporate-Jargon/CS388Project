@@ -41,7 +41,8 @@ open class ComposeFragment : Fragment() {
 
             params["key"] = api_key
             val client = AsyncHttpClient()
-            val jsonObject = JSONObject("{\"comment\": {\"text\": \"$description\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
+            val jsonObject =
+                JSONObject("{\"comment\": {\"text\": \"$description\"},\"languages\": [\"en\"],\"requestedAttributes\": {\"TOXICITY\": {}}}")
             val body = jsonObject.toString()
             val mediaType = "application/json".toMediaType()
             val requestBody = body.toRequestBody(mediaType)
@@ -61,18 +62,28 @@ open class ComposeFragment : Fragment() {
                         score = toxiccode
 
                         val bundle: Bundle = requireArguments()
-                        val communityName: String = bundle.getString("Name","")
-                        val communityId: String = bundle.getString("CommunityId","")
+                        val communityName: String = bundle.getString("Name", "")
+                        val communityId: String = bundle.getString("CommunityId", "")
+                        val filterSetting: Boolean =
+                            bundle.getString("ProfanityFilter", "true").toBoolean()
                         val community = Community()
                         community.setId(communityId)
                         community.setName(communityName)
 
                         val threshold = 0.75
-                        if (score < threshold) {
-                            submitPost(description, user, score)
+                        if (filterSetting) {
+                            if (score < threshold) {
+                                submitPost(description, user, score)
+                            } else {
+                                Log.e(MainActivity.TAG, "Error submitting post from toxicity")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Post is too toxic. Lighten up :)",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         } else {
-                            Log.e(MainActivity.TAG, "Error submitting post from toxicity")
-                            Toast.makeText(requireContext(), "Post is too toxic. Lighten up :)", Toast.LENGTH_SHORT).show()
+                            submitPost(description, user, score)
                         }
 
                         communicator.passCommunity(community)
