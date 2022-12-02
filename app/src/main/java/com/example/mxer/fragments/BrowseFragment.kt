@@ -48,6 +48,7 @@ open class BrowseFragment : Fragment() {
 
     fun getCommunities() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        query.whereEqualTo("isEvent", 0)
         query.findInBackground(object : FindCallback<Community> {
             override fun done(communities: MutableList<Community>?, e: ParseException?) {
                 if(e != null) {

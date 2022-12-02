@@ -16,8 +16,8 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
         val tvName: TextView
         val ivIcon: ImageView
         init {
-            tvName = itemView.findViewById<TextView>(R.id.tvName)
-            ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
+            tvName = itemView.findViewById<TextView>(R.id.tvEvName)
+            ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon1)
         }
         fun bind(community: Community) {
             tvName.setText(community.getName())
@@ -26,7 +26,7 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.browse_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_browse, parent, false)
         return ViewHolder(view)
     }
 
