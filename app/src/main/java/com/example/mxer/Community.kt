@@ -50,6 +50,14 @@ class Community: ParseObject() {
     fun setId(id: String) {
         put(KEY_ID, id)
     }
+
+    fun getIsEvent(): Number {
+        return getInt(KEY_ISEVENT)
+    }
+    fun setIsEvent(code: Number) {
+        put(KEY_ISEVENT, code)
+    }
+
     companion object {
         const val KEY_ID = "objectId"
         const val KEY_NAME = "name"
@@ -58,5 +66,6 @@ class Community: ParseObject() {
         const val KEY_EVENT1 = "event_community1"
         const val KEY_EVENT2 = "event_community2"
         const val KEY_OWNER = "owner"
+        const val KEY_ISEVENT = "isEvent"
     }
 }
