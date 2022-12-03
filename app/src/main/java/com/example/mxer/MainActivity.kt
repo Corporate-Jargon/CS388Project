@@ -120,6 +120,12 @@ class MainActivity : AppCompatActivity(), Communicator {
         transaction.replace(R.id.flContainer, fragment).commit()
     }
 
+    fun deleteEvent() {
+        // TODO Make a query to set the event's isstatus to 2
+        //  Deleting may require an event from a bundle to the
+        //  profile page, and add a create/delete button on profile
+
+    }
     fun createEvent() {
 //        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
 //        query.whereEqualTo("isEvent", 0)
@@ -167,25 +173,28 @@ class MainActivity : AppCompatActivity(), Communicator {
 //            }
 //        })
 
+        // TODO Whenever recyclerviews is added,
+        //  use the list of communities in the calculation,
+        //   not including the one you have
+        //  Put all this into a start query to get the community
+        //  the user is the owner of
 
-//        val event = Community()
-//        event.setName("Unknown")
-//        event.se
-//        post.setDesc(description)
-//        post.setAuthor(user)
-//        post.saveInBackground { exception ->
-//            if (exception != null) {
-//                Log.e(MainActivity.TAG, "Error while saving post")
-//                exception.printStackTrace()
-//                Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
-//
-//            } else {
-//                Log.i(MainActivity.TAG, "Successfully saved post")
-//                // Reset views
+        val event = Community()
+        event.setName("Unknown")
+        event.setOwner(ParseUser.getCurrentUser())
+        event.setIsEvent(1)
+        event.saveInBackground { exception ->
+            if (exception != null) {
+                Log.e(MainActivity.TAG, "Error while saving event")
+                exception.printStackTrace()
+                Toast.makeText(this, "Error saving event", Toast.LENGTH_SHORT).show()
+
+            } else {
+                Log.i(MainActivity.TAG, "Successfully saved event")
+                // Reset views
 //                view.findViewById<EditText>(R.id.etPost).setText("")
-//            }
-//            pb.visibility = ProgressBar.INVISIBLE
-//        }
+            }
+        }
     }
     companion object {
         const val TAG = "MainActivity"

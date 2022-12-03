@@ -46,6 +46,12 @@ class Community: ParseObject() {
     fun setMxe2(id: String) {
         put(KEY_EVENT2, id)
     }
+    fun getIsEvent(): Int? {
+        return getInt(KEY_STATUS)
+    }
+    fun setIsEvent(status: Int) {
+        put(KEY_STATUS, status)
+    }
     //TODO Delete function below once feed is fleshed out
     fun setId(id: String) {
         put(KEY_ID, id)
@@ -56,6 +62,7 @@ class Community: ParseObject() {
         const val KEY_ICON = "icon"
         const val KEY_DESC = "description"
         const val KEY_EVENT1 = "event_community1"
+        const val KEY_STATUS = "0"
         const val KEY_EVENT2 = "event_community2"
         const val KEY_OWNER = "owner"
     }
