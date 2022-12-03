@@ -5,20 +5,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.mxer.fragments.BrowseFragment
-import com.example.mxer.fragments.ProfileFragment
-import com.example.mxer.fragments.CommunityFragment
-import com.example.mxer.fragments.ComposeFragment
-import com.example.mxer.fragments.PostFragment
+import com.example.mxer.fragments.*
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.parse.FindCallback
+import com.parse.ParseException
+import com.parse.ParseQuery
+import com.parse.ParseUser
 
 class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
@@ -41,10 +44,10 @@ class MainActivity : AppCompatActivity(), Communicator {
                 R.id.action_home -> {
                     fragmentToShow = BrowseFragment()
                 }
-//                R.id.action_compose -> {
-//                    // Set it to the fragment we want to show
-//                    fragmentToShow = ComposeFragment()
-//                }
+                R.id.action_event -> {
+                    // Set it to the fragment we want to show
+                    fragmentToShow = AllEventsFragment()
+                }
                 R.id.action_profile -> {
                     fragmentToShow = ProfileFragment()
                 }
@@ -115,6 +118,74 @@ class MainActivity : AppCompatActivity(), Communicator {
         val fragment = PostFragment()
         fragment.arguments = bundle
         transaction.replace(R.id.flContainer, fragment).commit()
+    }
+
+    fun createEvent() {
+//        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+//        query.whereEqualTo("isEvent", 0)
+//        query.findInBackground(object : FindCallback<Community> {
+//            override fun done(communities: MutableList<Community>?, e: ParseException?) {
+//                if(e != null) {
+//                    Log.e(BrowseFragment.TAG, "Error fetching posts: ${e}")
+//                } else {
+//                    if(communities != null) {
+//                        allCommunities.addAll(communities)
+//                        Log.i(BrowseFragment.TAG, "Communities: ${allCommunities}")
+//                        adapter.notifyDataSetChanged()
+//
+//                    }
+//                }
+//            }
+//        })
+
+
+//        // Specify which class to query
+//        val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
+//        query.include(Post.KEY_USER)
+//        // Get all the posts only from the signed in user
+//        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser())
+//        // Newer posts appear first since it's descending
+//        query.addDescendingOrder("createdAt")
+//        query.findInBackground(object : FindCallback<Post> {
+//            override fun done(posts: MutableList<Post>?, e: ParseException?) {
+//                if (e != null) {
+//                    // Something went wrong
+//                    Log.e(TAG, "Error fetching posts")
+//                } else {
+//                    if (posts != null) {
+//                        // If we got something
+//                        for (post in posts) {
+//                            Log.i(
+//                                TAG,
+//                                "Post: " + post.getDescription() + " , username: " + post.getUser()?.username
+//                            )
+//                        }
+//                        allPosts.addAll(posts)
+//                        adapter.notifyDataSetChanged()
+//                    }
+//                }
+//            }
+//        })
+
+
+//        val event = Community()
+//        event.setName("Unknown")
+//        event.se
+//        post.setDesc(description)
+//        post.setAuthor(user)
+//        post.saveInBackground { exception ->
+//            if (exception != null) {
+//                Log.e(MainActivity.TAG, "Error while saving post")
+//                exception.printStackTrace()
+//                Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
+//
+//            } else {
+//                Log.i(MainActivity.TAG, "Successfully saved post")
+//                // Reset views
+//                view.findViewById<EditText>(R.id.etPost).setText("")
+//            }
+//            pb.visibility = ProgressBar.INVISIBLE
+//        }
     }
     companion object {
         const val TAG = "MainActivity"
