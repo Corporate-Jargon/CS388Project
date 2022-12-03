@@ -59,7 +59,7 @@ class ProfileFragment : Fragment() {
         dialog.setView(etBio)
 
         val user = ParseUser.getCurrentUser()
-        tvUserName.text = user.username
+        tvUserName.text = " " + user.username
         tvBio.text = user.getString("description")
         Glide.with(requireContext()).load(user.getParseFile("profile_picture")?.url).into(ivPfp)
 
