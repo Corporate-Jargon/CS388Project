@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class CommunityAdapter (val context: Context, val communities: ArrayList<Community>): RecyclerView.Adapter<CommunityAdapter.ViewHolder>() {
+class EventsAdapter (val context: Context, val events: ArrayList<Community>): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
@@ -31,11 +31,11 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val community = communities.get(position)
+        val community = events.get(position)
         holder.bind(community)
     }
 
     override fun getItemCount(): Int {
-        return communities.size
+        return events.size
     }
 }
