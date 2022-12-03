@@ -65,16 +65,15 @@ class ProfileFragment : Fragment() {
             onLaunchCamera()
         }
 
-        btnCreateEvent.setOnClickListener{
+        btnCreateEvent.setOnClickListener {
             createEvent()
         }
-        btnDeleteEvent.setOnClickListener{
+        btnDeleteEvent.setOnClickListener {
             deleteEvent()
         }
 
 
     }
-
 
 
     fun onLaunchCamera() {
@@ -88,7 +87,11 @@ class ProfileFragment : Fragment() {
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         if (photoFile != null) {
             val fileProvider: Uri =
-                FileProvider.getUriForFile(requireContext(), "com.codepath.mxer.fileprovider", photoFile!!)
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.codepath.mxer.fileprovider",
+                    photoFile!!
+                )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
             // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
@@ -118,7 +121,8 @@ class ProfileFragment : Fragment() {
         // Return the file target for the photo based on filename
         return File(mediaStorageDir.path + File.separator + fileName)
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -129,41 +133,51 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-    fun setPfp(image: File){
-      val user = ParseUser.getCurrentUser()
-      val pFile = ParseFile(image)
-      user.put("profile_picture", pFile)
-      user.saveInBackground { e ->
-          if (e == null) {
-              Log.i(Companion.TAG, "Successfully saved profile picture")
-              Toast.makeText(requireContext(), "Successfully updated profile picture!", Toast.LENGTH_SHORT).show()
-              val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-              // RESIZE BITMAP, see section below
-              // Load the taken image  into a preview
-              ivPfp = requireView().findViewById<ImageView>(R.id.profilePicture)
-              ivPfp.setImageBitmap(takenImage)
-          } else {
-              Log.e(Companion.TAG, e.printStackTrace().toString())
-              Toast.makeText(requireContext(), "Unable to update profile picture.", Toast.LENGTH_SHORT).show()
-          }
-      }
-  }
+
+    fun setPfp(image: File) {
+        val user = ParseUser.getCurrentUser()
+        val pFile = ParseFile(image)
+        user.put("profile_picture", pFile)
+        user.saveInBackground { e ->
+            if (e == null) {
+                Log.i(Companion.TAG, "Successfully saved profile picture")
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully updated profile picture!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+                // RESIZE BITMAP, see section below
+                // Load the taken image  into a preview
+                ivPfp = requireView().findViewById<ImageView>(R.id.profilePicture)
+                ivPfp.setImageBitmap(takenImage)
+            } else {
+                Log.e(Companion.TAG, e.printStackTrace().toString())
+                Toast.makeText(
+                    requireContext(),
+                    "Unable to update profile picture.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
     fun deleteEvent() {
         // TODO Make a query to set the event's isstatus to 2
         //  Deleting may require an event from a bundle to the
         //  profile page, and add a create/delete button on profile
-if (userEvents.isEmpty()) {
-    Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
-}
-else if (userEvents.isNotEmpty()) {
+        if (userEvents.isEmpty()) {
+            Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
+        } else if (userEvents.isNotEmpty()) {
 //            Set event and
 //            var event = userEvents[0]
 //            event.setIsEvent(2)
             // Send in background
-    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
 
-}
+        }
     }
+
     fun getOtherCommunities() {
         // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
@@ -181,8 +195,10 @@ else if (userEvents.isNotEmpty()) {
                         Log.i(MainActivity.TAG, "Communities: $allCommunities")
                     }
                 }
-            }})
+            }
+        })
     }
+
     fun getUserCommunities() {
         // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
@@ -200,8 +216,10 @@ else if (userEvents.isNotEmpty()) {
                         Log.i(MainActivity.TAG, "User Communities: $userCommunities")
                     }
                 }
-            }})
+            }
+        })
     }
+
     fun getUserEvents() {
         // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
@@ -222,6 +240,7 @@ else if (userEvents.isNotEmpty()) {
             }
         })
     }
+
     fun createEvent() {
         // TODO Take off the not
         if (!userEvents.isEmpty()) {
@@ -235,9 +254,9 @@ else if (userEvents.isNotEmpty()) {
             val selectedCommunity = allCommunities[0]
             val ucId = userCommunity
             val scId = selectedCommunity
-                event.setMxe1(userCommunity)
-                event.setMxe2(selectedCommunity)
-        event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
+            event.setMxe1(userCommunity)
+            event.setMxe2(selectedCommunity)
+            event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
             event.saveInBackground { exception ->
                 if (exception != null) {
                     //TODO Delete all .TAGS
@@ -251,6 +270,7 @@ else if (userEvents.isNotEmpty()) {
             }
         }
     }
+
     companion object {
         const val TAG = "ProfileFragment"
     }
