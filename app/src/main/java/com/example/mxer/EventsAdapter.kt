@@ -26,7 +26,7 @@ class EventsAdapter (val context: Context, val events: ArrayList<Community>): Re
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_browse, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false)
         return ViewHolder(view)
     }
 

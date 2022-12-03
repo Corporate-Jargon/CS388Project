@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mxer.*
 import com.parse.FindCallback
@@ -31,7 +32,7 @@ open class EventsFragment : Fragment() {
         val fragmentManager: FragmentManager = parentFragmentManager
         communicator = activity as Communicator
         val rvEvents = view.findViewById<RecyclerView>(R.id.rvEvents)
-
+        rvEvents.layoutManager = LinearLayoutManager(requireContext())
         adapter = EventsAdapter(requireContext(), allEvents)
         rvEvents.adapter = adapter
 
