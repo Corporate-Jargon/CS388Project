@@ -9,13 +9,16 @@
         <entry key="app/src/main/res/drawable/rounded_profile_picture.xml" value="0.1915" />
         <entry key="app/src/main/res/drawable/shadow.xml" value="0.345" />
         <entry key="app/src/main/res/font/inter.xml" value="0.4328125" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.15251922607421872" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2506927490234375" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.36989076033882473" />
         <entry key="app/src/main/res/layout/fragment_browse.xml" value="0.23143115942028986" />
+        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.22145741780598954" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/fragment_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.35020904541015613" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/item_post.xml" value="0.1" />
       </map>
     </option>
   </component>
