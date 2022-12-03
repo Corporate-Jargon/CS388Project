@@ -3,6 +3,7 @@ package com.example.mxer
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
+import com.parse.ParseUser
 
 @ParseClassName("Community")
 class Community: ParseObject() {
@@ -20,6 +21,12 @@ class Community: ParseObject() {
     }
     fun setIcon(icon: ParseFile) {
         put(KEY_ICON, icon)
+    }
+    fun getOwner(): ParseUser? {
+        return getParseUser(KEY_OWNER)
+    }
+    fun setOwner(owner: ParseUser) {
+        put(KEY_OWNER, owner)
     }
     fun getDesc(): String? {
         return getString(KEY_DESC)
@@ -50,5 +57,6 @@ class Community: ParseObject() {
         const val KEY_DESC = "description"
         const val KEY_EVENT1 = "event_community1"
         const val KEY_EVENT2 = "event_community2"
+        const val KEY_OWNER = "owner"
     }
 }
