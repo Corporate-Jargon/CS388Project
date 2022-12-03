@@ -34,16 +34,16 @@ class Community: ParseObject() {
     fun setDesc(desc: String) {
         put(KEY_NAME, desc)
     }
-    fun getMxe1(): String? {
-        return getString(KEY_EVENT1)
+    fun getMxe1(): ParseObject? {
+        return getParseObject(KEY_EVENT1)
     }
-    fun setMxe1(id: String) {
+    fun setMxe1(id: ParseObject) {
         put(KEY_EVENT1, id)
     }
-    fun getMxe2(): String? {
-        return getString(KEY_EVENT2)
+    fun getMxe2(): ParseObject? {
+        return getParseObject(KEY_EVENT2)
     }
-    fun setMxe2(id: String) {
+    fun setMxe2(id: ParseObject) {
         put(KEY_EVENT2, id)
     }
     //TODO Delete function below once feed is fleshed out

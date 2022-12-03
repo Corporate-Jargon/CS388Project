@@ -24,6 +24,7 @@ import com.example.mxer.R
 import com.parse.*
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
+import java.util.Collections
 
 class ProfileFragment : Fragment() {
     var allCommunities: ArrayList<Community> = ArrayList<Community>()
@@ -50,6 +51,7 @@ class ProfileFragment : Fragment() {
         getUserEvents()
         val tvUserName = view.findViewById<TextView>(R.id.username)
         val btnCreateEvent = view.findViewById<Button>(R.id.btn_createevent)
+        val btnDeleteEvent = view.findViewById<Button>(R.id.btn_deleteevent)
         val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
@@ -65,6 +67,9 @@ class ProfileFragment : Fragment() {
 
         btnCreateEvent.setOnClickListener{
             createEvent()
+        }
+        btnDeleteEvent.setOnClickListener{
+            deleteEvent()
         }
 
 
@@ -147,7 +152,17 @@ class ProfileFragment : Fragment() {
         // TODO Make a query to set the event's isstatus to 2
         //  Deleting may require an event from a bundle to the
         //  profile page, and add a create/delete button on profile
+if (userEvents.isEmpty()) {
+    Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
+}
+else if (userEvents.isNotEmpty()) {
+//            Set event and
+//            var event = userEvents[0]
+//            event.setIsEvent(2)
+            // Send in background
+    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
 
+}
     }
     fun getOtherCommunities() {
         // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
@@ -215,11 +230,13 @@ class ProfileFragment : Fragment() {
             event.setOwner(ParseUser.getCurrentUser())
             // TODO set this back after merge
 //            event.setIsEvent(1)
-            var userCommunity = userCommunities[0]
-            // TODO Set this to a random value in the arraylist of communities
-            var selectedCommunity = allCommunities[0]
-            userCommunity.getId()?.let { event.setMxe1(it) }
-            selectedCommunity.getId()?.let { event.setMxe2(it) }
+            val userCommunity = userCommunities[0]
+            allCommunities.shuffle()
+            val selectedCommunity = allCommunities[0]
+            val ucId = userCommunity
+            val scId = selectedCommunity
+                event.setMxe1(userCommunity)
+                event.setMxe2(selectedCommunity)
         event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
             event.saveInBackground { exception ->
                 if (exception != null) {
