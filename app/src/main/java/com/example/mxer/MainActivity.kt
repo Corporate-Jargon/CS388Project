@@ -2,14 +2,9 @@ package com.example.mxer
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.mxer.fragments.*
@@ -18,10 +13,6 @@ import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.parse.FindCallback
-import com.parse.ParseException
-import com.parse.ParseQuery
-import com.parse.ParseUser
 
 class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
@@ -47,7 +38,7 @@ class MainActivity : AppCompatActivity(), Communicator {
                 }
                 R.id.action_event -> {
                     // Set it to the fragment we want to show
-                    fragmentToShow = AllEventsFragment()
+                    fragmentToShow = EventsFragment()
                 }
                 R.id.action_profile -> {
                     fragmentToShow = ProfileFragment()

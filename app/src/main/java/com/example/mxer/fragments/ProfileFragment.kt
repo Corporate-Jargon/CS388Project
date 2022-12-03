@@ -163,36 +163,38 @@ class ProfileFragment : Fragment() {
     }
 
     fun deleteEvent() {
-        // TODO Make a query to set the event's isstatus to 2
-        //  Deleting may require an event from a bundle to the
-        //  profile page, and add a create/delete button on profile
         if (userEvents.isEmpty()) {
             Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
         } else if (userEvents.isNotEmpty()) {
-//            Set event and
-//            var event = userEvents[0]
-//            event.setIsEvent(2)
-            // Send in background
-            Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
-
+            val event = userEvents[0]
+            event.setIsEvent(2)
+            event.saveInBackground{ e ->
+                if (e == null) {
+                    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
+                    getOtherCommunities()
+                    getUserCommunities()
+                    getUserEvents()
+                } else {
+                    Toast.makeText(requireContext(), "Unable to delete event", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     fun getOtherCommunities() {
-        // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
-        //query.whereEqualTo("isEvent", 0)
+        query.whereEqualTo("isEvent", 0)
         query.include(Community.KEY_OWNER)
         query.whereNotEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
         query.findInBackground(object : FindCallback<Community> {
             override fun done(communities: MutableList<Community>?, e: ParseException?) {
                 if (e != null) {
                     // Something went wrong
-                    Log.e(MainActivity.TAG, "Error fetching communities")
+                    Log.e(TAG, "Error fetching communities")
                 } else {
                     if (communities != null) {
                         allCommunities.addAll(communities)
-                        Log.i(MainActivity.TAG, "Communities: $allCommunities")
+                        Log.i(TAG, "Communities: $allCommunities")
                     }
                 }
             }
@@ -200,20 +202,19 @@ class ProfileFragment : Fragment() {
     }
 
     fun getUserCommunities() {
-        // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
-        //query.whereEqualTo("isEvent", 0)
+        query.whereEqualTo("isEvent", 0)
         query.include(Community.KEY_OWNER)
         query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
         query.findInBackground(object : FindCallback<Community> {
             override fun done(communities: MutableList<Community>?, e: ParseException?) {
                 if (e != null) {
                     // Something went wrong
-                    Log.e(MainActivity.TAG, "Error fetching communities")
+                    Log.e(TAG, "Error fetching communities")
                 } else {
                     if (communities != null) {
                         userCommunities.addAll(communities)
-                        Log.i(MainActivity.TAG, "User Communities: $userCommunities")
+                        Log.i(TAG, "User Communities: $userCommunities")
                     }
                 }
             }
@@ -221,20 +222,19 @@ class ProfileFragment : Fragment() {
     }
 
     fun getUserEvents() {
-        // TODO When pr from recyclerviews is done, uncomment the whereequalto for isevent
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
-        //query.whereEqualTo("isEvent", 1)
+        query.whereEqualTo("isEvent", 1)
         query.include(Community.KEY_OWNER)
         query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
         query.findInBackground(object : FindCallback<Community> {
             override fun done(events: MutableList<Community>?, e: ParseException?) {
                 if (e != null) {
                     // Something went wrong
-                    Log.e(MainActivity.TAG, "Error fetching events")
+                    Log.e(TAG, "Error fetching events")
                 } else {
                     if (events != null) {
                         userEvents.addAll(events)
-                        Log.i(MainActivity.TAG, "User Events: $userEvents")
+                        Log.i(TAG, "User Events: $userEvents")
                     }
                 }
             }
@@ -242,29 +242,24 @@ class ProfileFragment : Fragment() {
     }
 
     fun createEvent() {
-        // TODO Take off the not
-        if (!userEvents.isEmpty()) {
+        if (userEvents.isEmpty()) {
             val event = Community()
             event.setName("Unknown")
             event.setOwner(ParseUser.getCurrentUser())
-            // TODO set this back after merge
-//            event.setIsEvent(1)
+            event.setIsEvent(1)
             val userCommunity = userCommunities[0]
             allCommunities.shuffle()
             val selectedCommunity = allCommunities[0]
-            val ucId = userCommunity
-            val scId = selectedCommunity
             event.setMxe1(userCommunity)
             event.setMxe2(selectedCommunity)
             event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
             event.saveInBackground { exception ->
                 if (exception != null) {
-                    //TODO Delete all .TAGS
-                    Log.e(MainActivity.TAG, "Error while saving event")
+                    Log.e(TAG, "Error while saving event")
                     exception.printStackTrace()
                 } else {
-                    Log.i(MainActivity.TAG, "Successfully saved event")
-                    Log.i(MainActivity.TAG, "Event: $event")
+                    Log.i(TAG, "Successfully saved event")
+                    Log.i(TAG, "Event: $event")
                     Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
                 }
             }
