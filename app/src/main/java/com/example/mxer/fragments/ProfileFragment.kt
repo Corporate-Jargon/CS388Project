@@ -1,6 +1,4 @@
 package com.example.mxer.fragments
-
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -24,7 +22,6 @@ import com.bumptech.glide.Glide
 import com.example.mxer.R
 import com.parse.ParseFile
 import com.parse.ParseUser
-import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 
 class ProfileFragment : Fragment() {
@@ -33,9 +30,7 @@ class ProfileFragment : Fragment() {
     val photoFileName = "photo.jpg"
     var photoFile: File? = null
     lateinit var ivPfp: ImageView
-    lateinit var tvBio: TextView
     lateinit var etBio: EditText
-    lateinit var dialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +44,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val tvUserName = view.findViewById<TextView>(R.id.username)
-        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
+//        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
 
@@ -70,11 +65,12 @@ class ProfileFragment : Fragment() {
         tvBio.setOnClickListener {
             etBio.setText(tvBio.text)
             dialog.show()
-            Toast.makeText(requireContext(), "Mixing up bio", Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireContext(), "Mixing up bio", Toast.LENGTH_LONG).show()
         }
 
         dialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save Bio", DialogInterface.OnClickListener {
                 dialog, id -> setBio()
+            tvBio.text = user.getString("description")
         })
 
 
