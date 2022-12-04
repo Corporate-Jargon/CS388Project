@@ -69,7 +69,7 @@ class ProfileFragment : Fragment() {
         }
 
         dialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save Bio", DialogInterface.OnClickListener {
-                dialog, id -> setBio()
+                dialog, id -> setBio(etBio)
             tvBio.text = user.getString("description")
         })
 
@@ -147,7 +147,7 @@ class ProfileFragment : Fragment() {
       }
   }
 
-    fun setBio() {
+    fun setBio(etBio: EditText) {
         val user = ParseUser.getCurrentUser()
         user.put("description", (etBio.text).toString())
         user.saveInBackground { e ->
