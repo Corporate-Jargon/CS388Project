@@ -1,5 +1,5 @@
 package com.example.mxer.fragments
-
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,9 +10,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -20,7 +22,6 @@ import com.bumptech.glide.Glide
 import com.example.mxer.R
 import com.parse.ParseFile
 import com.parse.ParseUser
-import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 
 class ProfileFragment : Fragment() {
@@ -29,6 +30,7 @@ class ProfileFragment : Fragment() {
     val photoFileName = "photo.jpg"
     var photoFile: File? = null
     lateinit var ivPfp: ImageView
+    lateinit var etBio: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,18 +44,34 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val tvUserName = view.findViewById<TextView>(R.id.username)
-        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
+//        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
 
+        val dialog = AlertDialog.Builder(requireContext()).create()
+        etBio = EditText(requireContext())
+        dialog.setTitle(" Edit Bio ")
+        dialog.setView(etBio)
+
         val user = ParseUser.getCurrentUser()
-        tvUserName.text = user.username
+        tvUserName.text = " " + user.username
         tvBio.text = user.getString("description")
         Glide.with(requireContext()).load(user.getParseFile("profile_picture")?.url).into(ivPfp)
 
         ivPfp.setOnClickListener {
             onLaunchCamera()
         }
+
+        tvBio.setOnClickListener {
+            etBio.setText(tvBio.text)
+            dialog.show()
+//            Toast.makeText(requireContext(), "Mixing up bio", Toast.LENGTH_LONG).show()
+        }
+
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save Bio", DialogInterface.OnClickListener {
+                dialog, id -> setBio(etBio)
+            tvBio.text = user.getString("description")
+        })
 
 
     }
@@ -128,7 +146,22 @@ class ProfileFragment : Fragment() {
           }
       }
   }
+
+    fun setBio(etBio: EditText) {
+        val user = ParseUser.getCurrentUser()
+        user.put("description", (etBio.text).toString())
+        user.saveInBackground { e ->
+            if (e == null) {
+                Log.i(Companion.TAG, "Successfully saved bio")
+                Toast.makeText(requireContext(), "Successfully updated bio!", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.e(Companion.TAG, e.printStackTrace().toString())
+                Toast.makeText(requireContext(), "Unable to update bio.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     companion object {
         const val TAG = "ProfileFragment"
     }
 }
+
