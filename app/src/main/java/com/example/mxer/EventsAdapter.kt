@@ -1,6 +1,7 @@
 package com.example.mxer
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ class EventsAdapter(
 
             ivIcon1.setOnClickListener {
                 val comm = Community()
+                Log.i("EventsAdapter", "ID: ${community.getId()}")
                 community.getId()?.let { it1 -> comm.setId(it1) }
                 community.getName()?.let { it1 -> comm.setName(it1) }
                 communicator.passCommunity(comm)

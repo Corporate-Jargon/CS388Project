@@ -53,14 +53,15 @@ open class CommunityFragment: Fragment() {
         query.include(Post.KEY_AUTHOR)
         query.addDescendingOrder("createdAt")
         query.limit = 20
-        //TODO fix query so it only finds posts under the selected community
-        //query.whereEqualTo(Post.KEY_COMM, commId)
+        Log.i(TAG, "commid: ${commId}")
+        query.whereEqualTo(Post.KEY_COMM, commId)
         query.findInBackground(object : FindCallback<Post> {
             override fun done(posts: MutableList<Post>?, e: ParseException?) {
                 if(e != null) {
                     Log.e(TAG, "Error fetching posts")
                 } else {
                     if(posts != null) {
+                        Log.i(TAG, "Posts: ${posts}")
                         allPosts.clear()
                         allPosts.addAll(posts)
                         adapter.notifyDataSetChanged()
