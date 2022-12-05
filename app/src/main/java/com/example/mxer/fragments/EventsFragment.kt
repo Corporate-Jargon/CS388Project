@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mxer.*
@@ -19,6 +18,8 @@ open class EventsFragment : Fragment() {
     private lateinit var communicator: Communicator
     lateinit var adapter: EventsAdapter
     var allEvents: ArrayList<Community> = ArrayList<Community>()
+    var allEventsImg1: ArrayList<Community> = ArrayList<Community>()
+    var allEventsImg2: ArrayList<Community> = ArrayList<Community>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +34,7 @@ open class EventsFragment : Fragment() {
         communicator = activity as Communicator
         val rvEvents = view.findViewById<RecyclerView>(R.id.rvEvents)
         rvEvents.layoutManager = LinearLayoutManager(requireContext())
-        adapter = EventsAdapter(requireContext(), allEvents)
+        adapter = EventsAdapter(requireContext(), allEvents, allEventsImg1, allEventsImg2)
         rvEvents.adapter = adapter
 
         getEvents()
@@ -48,6 +49,10 @@ open class EventsFragment : Fragment() {
                 } else {
                     if(events != null) {
                         allEvents.addAll(events)
+                        for (i in events.indices) {
+                            allEventsImg1.add(events[i].getMxe1() as Community)
+                            allEventsImg2.add(events[i].getMxe2() as Community)
+                        }
                         Log.i(TAG, "Events: ${allEvents}")
                         adapter.notifyDataSetChanged()
 

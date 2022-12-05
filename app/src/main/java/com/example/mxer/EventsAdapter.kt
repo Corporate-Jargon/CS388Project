@@ -8,20 +8,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.parse.ParseObject
 
-class EventsAdapter (val context: Context, val events: ArrayList<Community>): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+class EventsAdapter(
+    val context: Context,
+    val events: ArrayList<Community>,
+   val allEventsImg1: ArrayList<Community>,
+   val allEventsImg2: ArrayList<Community>
+): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
         val tvName: TextView
-        val ivIcon: ImageView
+        val ivIcon1: ImageView
+        val ivIcon2: ImageView
         init {
             tvName = itemView.findViewById<TextView>(R.id.tvCommName)
-            ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
+            ivIcon1 = itemView.findViewById<ImageView>(R.id.ivIcon1)
+            ivIcon2 = itemView.findViewById<ImageView>(R.id.ivIcon2)
         }
-        fun bind(community: Community) {
+        fun bind(community: Community, images1: Community, images2: Community) {
             tvName.setText(community.getName())
-            Glide.with(itemView.context).load(community.getIcon()?.url).into(ivIcon)
+            Glide.with(itemView.context).load(images1.getIcon()?.url).into(ivIcon1)
+            Glide.with(itemView.context).load(images2.getIcon()?.url).into(ivIcon2)
         }
     }
 
@@ -32,7 +41,11 @@ class EventsAdapter (val context: Context, val events: ArrayList<Community>): Re
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val community = events.get(position)
-        holder.bind(community)
+        ParseObject.fetchAllIfNeeded(allEventsImg1)
+        ParseObject.fetchAllIfNeeded(allEventsImg2)
+        val images1 = allEventsImg1.get(position)
+        val images2 = allEventsImg2.get(position)
+        holder.bind(community, images1, images2)
     }
 
     override fun getItemCount(): Int {
