@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.codepath.asynchttpclient.AsyncHttpClient
@@ -41,6 +42,8 @@ class CommentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
         communicator = activity as Communicator
+        view.findViewById<TextView>(R.id.ComposeTitle).text="Compose Comment"
+        view.findViewById<TextView>(R.id.btnPost).text="Comment"
         val bundle: Bundle = requireArguments()
         val postId = bundle.getString(Post.KEY_ID,"")
         queryPost(postId)
