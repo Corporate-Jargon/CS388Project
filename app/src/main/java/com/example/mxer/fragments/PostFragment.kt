@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.mxer.Communicator
-import com.example.mxer.Post
-import com.example.mxer.PostsAdapter
-import com.example.mxer.R
+import com.example.mxer.*
 import com.parse.FindCallback
 import com.parse.ParseException
 import com.parse.ParseQuery
@@ -22,9 +20,10 @@ import org.w3c.dom.Text
 
 
 class PostFragment : Fragment() {
-    //lateinit var rvComments: RecyclerView
-    //lateinit var adapter: CommentsAdapter
+    lateinit var rvComments: RecyclerView
+    lateinit var adapter: CommentsAdapter
     lateinit var communicator: Communicator
+    val allComments = ArrayList<Comment>()
     var originalPost = Post()
     lateinit var ivProfile: ImageView
     lateinit var tvAuthor: TextView
@@ -49,6 +48,12 @@ class PostFragment : Fragment() {
         tvAuthor = view.findViewById(R.id.tvAuthor)
         tvTimestamp = view.findViewById(R.id.tvTimestamp)
         tvBody = view.findViewById(R.id.tvBody)
+        communicator = activity as Communicator
+        rvComments = view.findViewById(R.id.rvComments)
+        adapter = CommentsAdapter(requireContext(), allComments)
+        rvComments.adapter = adapter
+        rvComments.layoutManager = LinearLayoutManager(requireContext())
+
     }
     open fun queryOriginal(postId: String){
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
