@@ -264,7 +264,12 @@ class ProfileFragment : Fragment() {
                         Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
                     }
                 }
+            } else {
+                Toast.makeText(requireContext(), "No owned communities", Toast.LENGTH_SHORT).show()
             }
+        }
+        else {
+            Toast.makeText(requireContext(), "Only one event at a time", Toast.LENGTH_SHORT).show()
         }
     }
 
