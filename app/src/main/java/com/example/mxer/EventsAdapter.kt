@@ -16,6 +16,7 @@ class EventsAdapter(
    val allEventsImg1: ArrayList<Community>,
    val allEventsImg2: ArrayList<Community>
 ): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+    private lateinit var communicator: Communicator
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
@@ -31,11 +32,28 @@ class EventsAdapter(
             tvName.setText(community.getName())
             Glide.with(itemView.context).load(images1.getIcon()?.url).into(ivIcon1)
             Glide.with(itemView.context).load(images2.getIcon()?.url).into(ivIcon2)
+
+            ivIcon1.setOnClickListener {
+                val comm = Community()
+                community.getId()?.let { it1 -> comm.setId(it1) }
+                community.getName()?.let { it1 -> comm.setName(it1) }
+                communicator.passCommunity(comm)
+            }
+
+            ivIcon2.setOnClickListener {
+                val comm = Community()
+                community.getId()?.let { it1 -> comm.setId(it1) }
+                community.getName()?.let { it1 -> comm.setName(it1) }
+                communicator.passCommunity(comm)
+            }
+
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false)
+        communicator = parent.context as Communicator
         return ViewHolder(view)
     }
 
