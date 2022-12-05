@@ -41,29 +41,33 @@ open class CommunityFragment: Fragment() {
         val communityName: String = bundle.getString("Name","")
         view.findViewById<TextView>(R.id.tvCommTitle).text = communityName
         val communityId: String = bundle.getString("CommunityId","")
-        queryCommunity(communityId)
-        view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose).setOnClickListener{
-            val community = Community()
-            community.setId(communityId)
-            community.setName(communityName)
-            communicator.passCompose(community)
-        }
+        queryCommunity(communityId, communityName)
     }
-    fun queryCommunity(communityId: String){
-        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
-        query.limit = 1
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(comms: MutableList<Community>?, e: ParseException?) {
-                if(e != null){
-                    Log.e(TAG, "Error fetching community")
-                } else {
-                    if(comms != null){
-                        originalCommunity = comms[0]
-                        queryPosts(originalCommunity)
+    fun queryCommunity(communityId: String, communityName: String){
+        try {
+            queryPosts(originalCommunity)
+        } catch (e: Exception) {
+            val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+            query.limit = 1
+            query.findInBackground(object : FindCallback<Community> {
+                override fun done(comms: MutableList<Community>?, e: ParseException?) {
+                    if (e != null) {
+                        Log.e(TAG, "Error fetching community")
+                    } else {
+                        if (comms != null) {
+                            originalCommunity = comms[0]
+                            queryPosts(originalCommunity)
+                            view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose)?.setOnClickListener{
+                                val community = Community()
+                                community.setId(communityId)
+                                community.setName(communityName)
+                                communicator.passCompose(community)
+                            }
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
     open fun queryPosts(community: Community) {
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
