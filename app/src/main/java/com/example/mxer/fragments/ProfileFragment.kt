@@ -243,24 +243,26 @@ class ProfileFragment : Fragment() {
 
     fun createEvent() {
         if (userEvents.isEmpty()) {
-            val event = Community()
-            event.setName("Unknown")
-            event.setOwner(ParseUser.getCurrentUser())
-            event.setIsEvent(1)
-            val userCommunity = userCommunities[0]
-            allCommunities.shuffle()
-            val selectedCommunity = allCommunities[0]
-            event.setMxe1(userCommunity)
-            event.setMxe2(selectedCommunity)
-            event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
-            event.saveInBackground { exception ->
-                if (exception != null) {
-                    Log.e(TAG, "Error while saving event")
-                    exception.printStackTrace()
-                } else {
-                    Log.i(TAG, "Successfully saved event")
-                    Log.i(TAG, "Event: $event")
-                    Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
+            // Bug fix for accounts that may not have a community owned
+            if (userCommunities.isNotEmpty()) {
+                val userCommunity = userCommunities[0]
+                allCommunities.shuffle()
+                val selectedCommunity = allCommunities[0]
+                val event = Community()
+                event.setOwner(ParseUser.getCurrentUser())
+                event.setIsEvent(1)
+                event.setMxe1(userCommunity)
+                event.setMxe2(selectedCommunity)
+                event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
+                event.saveInBackground { exception ->
+                    if (exception != null) {
+                        Log.e(TAG, "Error while saving event")
+                        exception.printStackTrace()
+                    } else {
+                        Log.i(TAG, "Successfully saved event")
+                        Log.i(TAG, "Event: $event")
+                        Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
