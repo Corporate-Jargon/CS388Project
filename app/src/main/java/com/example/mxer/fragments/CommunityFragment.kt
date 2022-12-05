@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mxer.*
 import com.parse.FindCallback
 import com.parse.ParseException
+import com.parse.ParseObject
 import com.parse.ParseQuery
+
 
 open class CommunityFragment: Fragment() {
     lateinit var rvPosts: RecyclerView
@@ -49,11 +51,13 @@ open class CommunityFragment: Fragment() {
         queryPosts(communityId)
     }
     open fun queryPosts(commId: String) {
+        val commQuery = ParseQuery<ParseObject>("Community")
+        commQuery.whereEqualTo("objectId", commId)
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
         query.include(Post.KEY_AUTHOR)
         query.addDescendingOrder("createdAt")
         query.limit = 20
-        query.whereEqualTo("community", commId)
+        query.whereMatchesQuery("community", commQuery)
         query.findInBackground(object : FindCallback<Post> {
             override fun done(posts: MutableList<Post>?, e: ParseException?) {
                 if(e != null) {
