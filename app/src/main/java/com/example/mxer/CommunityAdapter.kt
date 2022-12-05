@@ -25,7 +25,7 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
             Glide.with(itemView.context).load(community.getIcon()?.url).into(ivIcon)
             ivIcon.setOnClickListener {
                 val comm = Community()
-                community.getId()?.let { it1 -> comm.setId(it1) }
+                community.objectId?.let { it1 -> comm.setId(it1) }
                 community.getName()?.let { it1 -> comm.setName(it1) }
                 communicator.passCommunity(comm)
             }
