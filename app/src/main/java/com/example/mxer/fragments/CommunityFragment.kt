@@ -58,10 +58,7 @@ open class CommunityFragment: Fragment() {
                             originalCommunity = comms[0]
                             queryPosts(originalCommunity)
                             view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose)?.setOnClickListener{
-                                val community = Community()
-                                community.setId(communityId)
-                                community.setName(communityName)
-                                communicator.passCompose(community)
+                                communicator.passCompose(originalCommunity)
                             }
                         }
                     }

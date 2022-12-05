@@ -9,11 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.mxer.fragments.BrowseFragment
-import com.example.mxer.fragments.ProfileFragment
-import com.example.mxer.fragments.CommunityFragment
-import com.example.mxer.fragments.ComposeFragment
-import com.example.mxer.fragments.PostFragment
+import com.example.mxer.fragments.*
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
@@ -112,7 +108,6 @@ class MainActivity : AppCompatActivity(), Communicator {
         val bundle = Bundle()
         bundle.putString("CommunityId", community.getId())
         bundle.putString("Name", community.getName())
-        //TODO read from list of nums instead of hard-coded value
         bundle.putString("ProfanityFilter", listOfNums[SettingsActivity.Setting.FILTER.pos])
         val transaction = this.supportFragmentManager.beginTransaction()
         val fragment = ComposeFragment()
@@ -130,5 +125,14 @@ class MainActivity : AppCompatActivity(), Communicator {
     }
     companion object {
         const val TAG = "MainActivity"
+    }
+
+    override fun passComment(post: Post) {
+        val bundle = Bundle()
+        bundle.putString(Post.KEY_ID, post.objectId)
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = CommentFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
     }
 }
