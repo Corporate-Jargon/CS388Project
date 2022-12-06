@@ -8,23 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.mxer.Communicator
-import com.example.mxer.Post
-import com.example.mxer.PostsAdapter
-import com.example.mxer.R
+import com.example.mxer.*
 import com.parse.FindCallback
+import com.parse.Parse
 import com.parse.ParseException
 import com.parse.ParseQuery
 import org.w3c.dom.Text
 
 
 class PostFragment : Fragment() {
-    //lateinit var rvComments: RecyclerView
-    //lateinit var adapter: CommentsAdapter
+    lateinit var rvComments: RecyclerView
+    lateinit var adapter: CommentsAdapter
     lateinit var communicator: Communicator
+    val allComments = ArrayList<Comment>()
     var originalPost = Post()
     lateinit var ivProfile: ImageView
     lateinit var tvAuthor: TextView
@@ -49,6 +49,12 @@ class PostFragment : Fragment() {
         tvAuthor = view.findViewById(R.id.tvAuthor)
         tvTimestamp = view.findViewById(R.id.tvTimestamp)
         tvBody = view.findViewById(R.id.tvBody)
+        communicator = activity as Communicator
+        rvComments = view.findViewById(R.id.rvComments)
+        adapter = CommentsAdapter(requireContext(), allComments)
+        rvComments.adapter = adapter
+        rvComments.layoutManager = LinearLayoutManager(requireContext())
+
     }
     open fun queryOriginal(postId: String){
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
@@ -76,6 +82,30 @@ class PostFragment : Fragment() {
                             .apply(options)
                             .into(ivProfile)
                         Log.i(TAG, posts.toString())
+                        queryComments(originalPost)
+                        view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose)?.setOnClickListener{
+                            communicator.passComment(originalPost)
+                        }
+                    }
+                }
+            }
+        })
+    }
+    fun queryComments(post: Post){
+        val query: ParseQuery<Comment> = ParseQuery.getQuery(Comment::class.java)
+        query.include(Comment.KEY_AUTHOR)
+        query.addDescendingOrder("createdBy")
+        query.limit = 20
+        query.whereEqualTo(Comment.KEY_REPLY, post)
+        query.findInBackground(object : FindCallback<Comment> {
+            override fun done(comments: MutableList<Comment>?, e: ParseException?) {
+                if (e != null) {
+                    Log.e(TAG, "Error fetching comments")
+                } else {
+                    if(comments != null) {
+                        allComments.clear()
+                        allComments.addAll(comments)
+                        adapter.notifyDataSetChanged()
                     }
                 }
             }

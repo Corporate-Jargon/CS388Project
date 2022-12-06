@@ -4,4 +4,5 @@ interface Communicator {
     fun passCommunity(community: Community)
     fun passCompose(community: Community)
     fun passPost(post: Post)
+    fun passComment(post: Post)
 }
