@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mxer.*
 import com.parse.FindCallback
 import com.parse.ParseException
+import com.parse.ParseObject
 import com.parse.ParseQuery
+
 
 open class CommunityFragment: Fragment() {
     lateinit var rvPosts: RecyclerView
     lateinit var adapter: PostsAdapter
     lateinit var communicator: Communicator
-    lateinit var originalCommunity: Community
     val allPosts = ArrayList<Post>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,43 +42,29 @@ open class CommunityFragment: Fragment() {
         val communityName: String = bundle.getString("Name","")
         view.findViewById<TextView>(R.id.tvCommTitle).text = communityName
         val communityId: String = bundle.getString("CommunityId","")
-        queryCommunity(communityId, communityName)
-    }
-    fun queryCommunity(communityId: String, communityName: String){
-        try {
-            queryPosts(originalCommunity)
-        } catch (e: Exception) {
-            val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
-            query.limit = 1
-            query.findInBackground(object : FindCallback<Community> {
-                override fun done(comms: MutableList<Community>?, e: ParseException?) {
-                    if (e != null) {
-                        Log.e(TAG, "Error fetching community")
-                    } else {
-                        if (comms != null) {
-                            originalCommunity = comms[0]
-                            queryPosts(originalCommunity)
-                            view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose)?.setOnClickListener{
-                                communicator.passCompose(originalCommunity)
-                            }
-                        }
-                    }
-                }
-            })
+        view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose).setOnClickListener{
+            val community = Community()
+            community.setId(communityId)
+            community.setName(communityName)
+            communicator.passCompose(community)
         }
+        queryPosts(communityId)
     }
-    open fun queryPosts(community: Community) {
+    open fun queryPosts(commId: String) {
+        val commQuery = ParseQuery<ParseObject>("Community")
+        commQuery.whereEqualTo("objectId", commId)
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
         query.include(Post.KEY_AUTHOR)
         query.addDescendingOrder("createdAt")
         query.limit = 20
-        query.whereEqualTo(Post.KEY_COMM, community)
+        query.whereMatchesQuery("community", commQuery)
         query.findInBackground(object : FindCallback<Post> {
             override fun done(posts: MutableList<Post>?, e: ParseException?) {
                 if(e != null) {
-                    Log.e(TAG, "Error fetching posts")
+                    Log.e(TAG, "Error fetching posts: ${e}")
                 } else {
                     if(posts != null) {
+                        Log.i(TAG, "Posts: ${posts}")
                         allPosts.clear()
                         allPosts.addAll(posts)
                         adapter.notifyDataSetChanged()

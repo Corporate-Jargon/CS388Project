@@ -2,10 +2,8 @@ package com.example.mxer
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -20,6 +18,7 @@ import com.parse.ParseUser
 class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
     var filterSetting: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,10 +38,10 @@ class MainActivity : AppCompatActivity(), Communicator {
                 R.id.action_home -> {
                     fragmentToShow = BrowseFragment()
                 }
-//                R.id.action_compose -> {
-//                    // Set it to the fragment we want to show
-//                    fragmentToShow = ComposeFragment()
-//                }
+                R.id.action_event -> {
+                    // Set it to the fragment we want to show
+                    fragmentToShow = EventsFragment()
+                }
                 R.id.action_profile -> {
                     fragmentToShow = ProfileFragment()
                 }
@@ -123,6 +122,8 @@ class MainActivity : AppCompatActivity(), Communicator {
         fragment.arguments = bundle
         transaction.replace(R.id.flContainer, fragment).commit()
     }
+
+
     companion object {
         const val TAG = "MainActivity"
     }

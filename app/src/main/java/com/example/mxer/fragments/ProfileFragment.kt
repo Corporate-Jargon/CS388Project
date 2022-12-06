@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,12 +20,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.mxer.Community
+import com.example.mxer.MainActivity
 import com.example.mxer.R
+import com.parse.*
+import de.hdodenhof.circleimageview.CircleImageView
 import com.parse.ParseFile
 import com.parse.ParseUser
 import java.io.File
+import java.util.Collections
 
 class ProfileFragment : Fragment() {
+    var allCommunities: ArrayList<Community> = ArrayList<Community>()
+    var userCommunities: ArrayList<Community> = ArrayList<Community>()
+    var userEvents: ArrayList<Community> = ArrayList<Community>()
 
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034
     val photoFileName = "photo.jpg"
@@ -42,8 +51,13 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        getOtherCommunities()
+        getUserCommunities()
+        getUserEvents()
         val tvUserName = view.findViewById<TextView>(R.id.username)
+        val btnCreateEvent = view.findViewById<Button>(R.id.btn_createevent)
+        val btnDeleteEvent = view.findViewById<Button>(R.id.btn_deleteevent)
+        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
 //        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
@@ -62,6 +76,13 @@ class ProfileFragment : Fragment() {
             onLaunchCamera()
         }
 
+        btnCreateEvent.setOnClickListener {
+            createEvent()
+        }
+        btnDeleteEvent.setOnClickListener {
+            deleteEvent()
+        }
+
         tvBio.setOnClickListener {
             etBio.setText(tvBio.text)
             dialog.show()
@@ -75,6 +96,8 @@ class ProfileFragment : Fragment() {
 
 
     }
+
+
     fun onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -86,7 +109,11 @@ class ProfileFragment : Fragment() {
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         if (photoFile != null) {
             val fileProvider: Uri =
-                FileProvider.getUriForFile(requireContext(), "com.codepath.mxer.fileprovider", photoFile!!)
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.codepath.mxer.fileprovider",
+                    photoFile!!
+                )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
             // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
@@ -116,7 +143,8 @@ class ProfileFragment : Fragment() {
         // Return the file target for the photo based on filename
         return File(mediaStorageDir.path + File.separator + fileName)
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -127,25 +155,6 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-    fun setPfp(image: File){
-      val user = ParseUser.getCurrentUser()
-      val pFile = ParseFile(image)
-      user.put("profile_picture", pFile)
-      user.saveInBackground { e ->
-          if (e == null) {
-              Log.i(Companion.TAG, "Successfully saved profile picture")
-              Toast.makeText(requireContext(), "Successfully updated profile picture!", Toast.LENGTH_SHORT).show()
-              val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-              // RESIZE BITMAP, see section below
-              // Load the taken image  into a preview
-              ivPfp = requireView().findViewById<ImageView>(R.id.profilePicture)
-              ivPfp.setImageBitmap(takenImage)
-          } else {
-              Log.e(Companion.TAG, e.printStackTrace().toString())
-              Toast.makeText(requireContext(), "Unable to update profile picture.", Toast.LENGTH_SHORT).show()
-          }
-      }
-  }
 
     fun setBio(etBio: EditText) {
         val user = ParseUser.getCurrentUser()
@@ -160,6 +169,146 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
+    fun setPfp(image: File) {
+        val user = ParseUser.getCurrentUser()
+        val pFile = ParseFile(image)
+        user.put("profile_picture", pFile)
+        user.saveInBackground { e ->
+            if (e == null) {
+                Log.i(Companion.TAG, "Successfully saved profile picture")
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully updated profile picture!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+                // RESIZE BITMAP, see section below
+                // Load the taken image  into a preview
+                ivPfp = requireView().findViewById<ImageView>(R.id.profilePicture)
+                ivPfp.setImageBitmap(takenImage)
+            } else {
+                Log.e(Companion.TAG, e.printStackTrace().toString())
+                Toast.makeText(
+                    requireContext(),
+                    "Unable to update profile picture.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    fun deleteEvent() {
+        if (userEvents.isEmpty()) {
+            Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
+        } else if (userEvents.isNotEmpty()) {
+            val event = userEvents[0]
+            event.setIsEvent(2)
+            event.saveInBackground{ e ->
+                if (e == null) {
+                    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
+                    getOtherCommunities()
+                    getUserCommunities()
+                    getUserEvents()
+                } else {
+                    Toast.makeText(requireContext(), "Unable to delete event", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    fun getOtherCommunities() {
+        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        query.whereEqualTo("isEvent", 0)
+        query.include(Community.KEY_OWNER)
+        query.whereNotEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
+        query.findInBackground(object : FindCallback<Community> {
+            override fun done(communities: MutableList<Community>?, e: ParseException?) {
+                if (e != null) {
+                    // Something went wrong
+                    Log.e(TAG, "Error fetching communities")
+                } else {
+                    if (communities != null) {
+                        allCommunities.addAll(communities)
+                        Log.i(TAG, "Communities: $allCommunities")
+                    }
+                }
+            }
+        })
+    }
+
+    fun getUserCommunities() {
+        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        query.whereEqualTo("isEvent", 0)
+        query.include(Community.KEY_OWNER)
+        query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
+        query.findInBackground(object : FindCallback<Community> {
+            override fun done(communities: MutableList<Community>?, e: ParseException?) {
+                if (e != null) {
+                    // Something went wrong
+                    Log.e(TAG, "Error fetching communities")
+                } else {
+                    if (communities != null) {
+                        userCommunities.addAll(communities)
+                        Log.i(TAG, "User Communities: $userCommunities")
+                    }
+                }
+            }
+        })
+    }
+
+    fun getUserEvents() {
+        val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        query.whereEqualTo("isEvent", 1)
+        query.include(Community.KEY_OWNER)
+        query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
+        query.findInBackground(object : FindCallback<Community> {
+            override fun done(events: MutableList<Community>?, e: ParseException?) {
+                if (e != null) {
+                    // Something went wrong
+                    Log.e(TAG, "Error fetching events")
+                } else {
+                    if (events != null) {
+                        userEvents.addAll(events)
+                        Log.i(TAG, "User Events: $userEvents")
+                    }
+                }
+            }
+        })
+    }
+
+    fun createEvent() {
+        if (userEvents.isEmpty()) {
+            // Bug fix for accounts that may not have a community owned
+            if (userCommunities.isNotEmpty()) {
+                val userCommunity = userCommunities[0]
+                allCommunities.shuffle()
+                val selectedCommunity = allCommunities[0]
+                val event = Community()
+                event.setOwner(ParseUser.getCurrentUser())
+                event.setIsEvent(1)
+                event.setMxe1(userCommunity)
+                event.setMxe2(selectedCommunity)
+                event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
+                event.saveInBackground { exception ->
+                    if (exception != null) {
+                        Log.e(TAG, "Error while saving event")
+                        exception.printStackTrace()
+                    } else {
+                        Log.i(TAG, "Successfully saved event")
+                        Log.i(TAG, "Event: $event")
+                        Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "No owned communities", Toast.LENGTH_SHORT).show()
+            }
+        }
+        else {
+            Toast.makeText(requireContext(), "Only one event at a time", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     companion object {
         const val TAG = "ProfileFragment"
     }
