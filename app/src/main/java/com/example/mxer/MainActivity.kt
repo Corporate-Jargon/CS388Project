@@ -13,6 +13,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.parse.ParseUser
 
 class MainActivity : AppCompatActivity(), Communicator {
     var listOfNums = mutableListOf<String>("true","true","true","true")
@@ -21,12 +22,13 @@ class MainActivity : AppCompatActivity(), Communicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (File(filesDir, "settings.txt").exists()){
+        if (getDataFile().exists()){
             loadItems()
-            filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
         } else {
-            filterSetting = true
+            saveItems()
         }
+        filterSetting = listOfNums[SettingsActivity.Setting.FILTER.pos].toBoolean()
+
         val fragmentManager: FragmentManager = supportFragmentManager
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             // Alias
@@ -69,15 +71,23 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
-        return File(filesDir, "settings.txt")
+        val username = ParseUser.getCurrentUser().username
+        return File(filesDir, "settings${username}.txt")
     }
-    // Load the items by reading every line in the data file
+//     Load the items by reading every line in the data file
     fun loadItems() {
         try {
             listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())
         } catch (ioException: IOException) {
             ioException.printStackTrace()
 
+        }
+    }
+    fun saveItems() {
+        try {
+            FileUtils.writeLines(getDataFile(), listOfNums)
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
         }
     }
 
@@ -97,6 +107,7 @@ class MainActivity : AppCompatActivity(), Communicator {
         val bundle = Bundle()
         bundle.putString("CommunityId", community.getId())
         bundle.putString("Name", community.getName())
+        bundle.putString("ProfanityFilter", listOfNums[SettingsActivity.Setting.FILTER.pos])
         val transaction = this.supportFragmentManager.beginTransaction()
         val fragment = ComposeFragment()
         fragment.arguments = bundle
@@ -115,5 +126,14 @@ class MainActivity : AppCompatActivity(), Communicator {
 
     companion object {
         const val TAG = "MainActivity"
+    }
+
+    override fun passComment(post: Post) {
+        val bundle = Bundle()
+        bundle.putString(Post.KEY_ID, post.objectId)
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val fragment = CommentFragment()
+        fragment.arguments = bundle
+        transaction.replace(R.id.flContainer, fragment).commit()
     }
 }
