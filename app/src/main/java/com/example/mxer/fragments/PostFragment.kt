@@ -70,7 +70,6 @@ class PostFragment : Fragment() {
                     if(posts != null) {
                         originalPost = posts[0]
                         tvAuthor.text = originalPost.getAuthor()?.username
-                        //TODO make timestamp relative
                         tvTimestamp.text = ""
                         tvBody.text = originalPost.getDesc()
                         var options: RequestOptions = RequestOptions()
