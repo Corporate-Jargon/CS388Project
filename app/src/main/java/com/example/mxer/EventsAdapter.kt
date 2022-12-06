@@ -30,7 +30,7 @@ class EventsAdapter(
             ivIcon2 = itemView.findViewById<ImageView>(R.id.ivIcon2)
         }
         fun bind(community: Community, images1: Community, images2: Community) {
-            tvName.setText(community.getName())
+            tvName.text = community.getName()
             Glide.with(itemView.context).load(images1.getIcon()?.url).into(ivIcon1)
             Glide.with(itemView.context).load(images2.getIcon()?.url).into(ivIcon2)
 

@@ -21,7 +21,7 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
             ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
         }
         fun bind(community: Community) {
-            tvName.setText(community.getName())
+            tvName.text = community.getName()
             Glide.with(itemView.context).load(community.getIcon()?.url).into(ivIcon)
             ivIcon.setOnClickListener {
                 val comm = Community()
