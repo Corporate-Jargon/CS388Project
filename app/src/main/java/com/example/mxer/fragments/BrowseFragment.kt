@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.ParseException
+import com.example.mxer.Communicator
+import com.example.mxer.Community
+import com.example.mxer.CommunityAdapter
+import com.example.mxer.R
 import com.parse.ParseQuery
 
 open class BrowseFragment : Fragment() {
     private lateinit var communicator: Communicator
     lateinit var adapter: CommunityAdapter
-    var allCommunities: ArrayList<Community> = ArrayList<Community>()
+    var allCommunities: ArrayList<Community> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,23 +43,21 @@ open class BrowseFragment : Fragment() {
         getCommunities()
     }
 
-    fun getCommunities() {
+    private fun getCommunities() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 0)
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(communities: MutableList<Community>?, e: ParseException?) {
-                if(e != null) {
-                    Log.e(TAG, "Error fetching posts: ${e}")
-                } else {
-                    if(communities != null) {
-                        allCommunities.addAll(communities)
-                        Log.i(TAG, "Communities: ${allCommunities}")
-                        adapter.notifyDataSetChanged()
+        query.findInBackground { communities, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching posts: $e")
+            } else {
+                if (communities != null) {
+                    allCommunities.addAll(communities)
+                    Log.i(TAG, "Communities: $allCommunities")
+                    adapter.notifyDataSetChanged()
 
-                    }
                 }
             }
-        })
+        }
     }
 
 

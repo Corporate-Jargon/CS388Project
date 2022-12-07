@@ -1,7 +1,6 @@
 package com.example.mxer
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +12,21 @@ import com.parse.ParseObject
 
 class EventsAdapter(
     val context: Context,
-    val events: ArrayList<Community>,
-   val allEventsImg1: ArrayList<Community>,
-   val allEventsImg2: ArrayList<Community>
+    private val events: ArrayList<Community>,
+    private val allEventsImg1: ArrayList<Community>,
+    private val allEventsImg2: ArrayList<Community>
 ): RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     private lateinit var communicator: Communicator
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
-        val tvName: TextView
-        val ivIcon1: ImageView
-        val ivIcon2: ImageView
+        private val tvName: TextView
+        private val ivIcon1: ImageView
+        private val ivIcon2: ImageView
         init {
-            tvName = itemView.findViewById<TextView>(R.id.tvCommName)
-            ivIcon1 = itemView.findViewById<ImageView>(R.id.ivIcon1)
-            ivIcon2 = itemView.findViewById<ImageView>(R.id.ivIcon2)
+            tvName = itemView.findViewById(R.id.tvCommName)
+            ivIcon1 = itemView.findViewById(R.id.ivIcon1)
+            ivIcon2 = itemView.findViewById(R.id.ivIcon2)
         }
         fun bind(community: Community, images1: Community, images2: Community) {
             tvName.text = community.getName()
@@ -59,11 +58,11 @@ class EventsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val community = events.get(position)
+        val community = events[position]
         ParseObject.fetchAllIfNeeded(allEventsImg1)
         ParseObject.fetchAllIfNeeded(allEventsImg2)
-        val images1 = allEventsImg1.get(position)
-        val images2 = allEventsImg2.get(position)
+        val images1 = allEventsImg1[position]
+        val images2 = allEventsImg2[position]
         holder.bind(community, images1, images2)
     }
 

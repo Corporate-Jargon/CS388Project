@@ -9,16 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class CommunityAdapter (val context: Context, val communities: ArrayList<Community>): RecyclerView.Adapter<CommunityAdapter.ViewHolder>() {
+class CommunityAdapter (val context: Context, private val communities: ArrayList<Community>): RecyclerView.Adapter<CommunityAdapter.ViewHolder>() {
     private lateinit var communicator: Communicator
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
-        val tvName: TextView
-        val ivIcon: ImageView
+        private val tvName: TextView
+        private val ivIcon: ImageView
         init {
-            tvName = itemView.findViewById<TextView>(R.id.tvCommName)
-            ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
+            tvName = itemView.findViewById(R.id.tvCommName)
+            ivIcon = itemView.findViewById(R.id.ivIcon)
         }
         fun bind(community: Community) {
             tvName.text = community.getName()
@@ -40,7 +40,7 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val community = communities.get(position)
+        val community = communities[position]
         holder.bind(community)
     }
 

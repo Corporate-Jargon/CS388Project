@@ -9,17 +9,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.ParseException
+import com.example.mxer.Communicator
+import com.example.mxer.Community
+import com.example.mxer.EventsAdapter
+import com.example.mxer.R
 import com.parse.ParseQuery
 
 open class EventsFragment : Fragment() {
     private lateinit var communicator: Communicator
     lateinit var adapter: EventsAdapter
-    var allEvents: ArrayList<Community> = ArrayList<Community>()
-    var allEventsImg1: ArrayList<Community> = ArrayList<Community>()
-    var allEventsImg2: ArrayList<Community> = ArrayList<Community>()
+    var allEvents: ArrayList<Community> = ArrayList()
+    var allEventsImg1: ArrayList<Community> = ArrayList()
+    var allEventsImg2: ArrayList<Community> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,27 +40,25 @@ open class EventsFragment : Fragment() {
 
         getEvents()
     }
-    fun getEvents() {
+    private fun getEvents() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 1)
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(events: MutableList<Community>?, e: ParseException?) {
-                if(e != null) {
-                    Log.e(TAG, "Error fetching events: ${e}")
-                } else {
-                    if(events != null) {
-                        allEvents.addAll(events)
-                        for (i in events.indices) {
-                            allEventsImg1.add(events[i].getMxe1() as Community)
-                            allEventsImg2.add(events[i].getMxe2() as Community)
-                        }
-                        Log.i(TAG, "Events: ${allEvents}")
-                        adapter.notifyDataSetChanged()
-
+        query.findInBackground { events, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching events: $e")
+            } else {
+                if (events != null) {
+                    allEvents.addAll(events)
+                    for (i in events.indices) {
+                        allEventsImg1.add(events[i].getMxe1() as Community)
+                        allEventsImg2.add(events[i].getMxe2() as Community)
                     }
+                    Log.i(TAG, "Events: $allEvents")
+                    adapter.notifyDataSetChanged()
+
                 }
             }
-        })
+        }
     }
 
     companion object {

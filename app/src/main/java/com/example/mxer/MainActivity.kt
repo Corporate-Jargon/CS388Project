@@ -16,8 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.parse.ParseUser
 
 class MainActivity : AppCompatActivity(), Communicator {
-    var listOfNums = mutableListOf<String>("true","true","true","true")
-    var filterSetting: Boolean = true
+    private var listOfNums = mutableListOf("true","true","true","true")
+    private var filterSetting: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +69,13 @@ class MainActivity : AppCompatActivity(), Communicator {
         return super.onOptionsItemSelected(item)
     }
 
-    fun getDataFile(): File {
+    private fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
         val username = ParseUser.getCurrentUser().username
         return File(filesDir, "settings${username}.txt")
     }
 //     Load the items by reading every line in the data file
-    fun loadItems() {
+private fun loadItems() {
         try {
             listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())
         } catch (ioException: IOException) {
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), Communicator {
 
         }
     }
-    fun saveItems() {
+    private fun saveItems() {
         try {
             FileUtils.writeLines(getDataFile(), listOfNums)
         } catch (ioException: IOException) {

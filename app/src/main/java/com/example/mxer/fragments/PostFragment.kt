@@ -2,26 +2,22 @@ package com.example.mxer.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.Parse
-import com.parse.ParseException
 import com.parse.ParseQuery
-import org.w3c.dom.Text
 
 
 class PostFragment : Fragment() {
-    lateinit var rvComments: RecyclerView
+    private lateinit var rvComments: RecyclerView
     lateinit var adapter: CommentsAdapter
     lateinit var communicator: Communicator
     val allComments = ArrayList<Comment>()
@@ -56,39 +52,37 @@ class PostFragment : Fragment() {
         rvComments.layoutManager = LinearLayoutManager(requireContext())
 
     }
-    open fun queryOriginal(postId: String){
+    fun queryOriginal(postId: String){
         val query: ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
         query.include(Post.KEY_AUTHOR)
         query.limit = 1
         query.whereEqualTo(Post.KEY_ID,postId)
         Log.i(TAG, postId)
-        query.findInBackground(object : FindCallback<Post> {
-            override fun done(posts: MutableList<Post>?, e: ParseException?) {
-                if(e != null){
-                    Log.e(TAG, "Error finding original post")
-                } else {
-                    if(posts != null) {
-                        originalPost = posts[0]
-                        tvAuthor.text = originalPost.getAuthor()?.username
-                        tvTimestamp.text = ""
-                        tvBody.text = originalPost.getDesc()
-                        var options: RequestOptions = RequestOptions()
-                        options.centerCrop()
-                        options.circleCrop()
-                        Glide.with(requireContext())
-                            .load(originalPost.getAuthor()?.getParseFile("profile_picture")?.url)
-                            .override(300, 300)
-                            .apply(options)
-                            .into(ivProfile)
-                        Log.i(TAG, posts.toString())
-                        queryComments(originalPost)
-                        view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.btnCompose)?.setOnClickListener{
-                            communicator.passComment(originalPost)
-                        }
+        query.findInBackground { posts, e ->
+            if (e != null) {
+                Log.e(TAG, "Error finding original post")
+            } else {
+                if (posts != null) {
+                    originalPost = posts[0]
+                    tvAuthor.text = originalPost.getAuthor()?.username
+                    tvTimestamp.text = ""
+                    tvBody.text = originalPost.getDesc()
+                    val options = RequestOptions().centerCrop().circleCrop()
+                    Glide.with(requireContext())
+                        .load(originalPost.getAuthor()?.getParseFile("profile_picture")?.url)
+                        .override(300, 300)
+                        .apply(options)
+                        .into(ivProfile)
+                    Log.i(TAG, posts.toString())
+                    queryComments(originalPost)
+                    view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(
+                        R.id.btnCompose
+                    )?.setOnClickListener {
+                        communicator.passComment(originalPost)
                     }
                 }
             }
-        })
+        }
     }
     fun queryComments(post: Post){
         val query: ParseQuery<Comment> = ParseQuery.getQuery(Comment::class.java)
@@ -96,19 +90,17 @@ class PostFragment : Fragment() {
         query.addDescendingOrder("createdBy")
         query.limit = 20
         query.whereEqualTo(Comment.KEY_REPLY, post)
-        query.findInBackground(object : FindCallback<Comment> {
-            override fun done(comments: MutableList<Comment>?, e: ParseException?) {
-                if (e != null) {
-                    Log.e(TAG, "Error fetching comments")
-                } else {
-                    if(comments != null) {
-                        allComments.clear()
-                        allComments.addAll(comments)
-                        adapter.notifyDataSetChanged()
-                    }
+        query.findInBackground { comments, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching comments")
+            } else {
+                if (comments != null) {
+                    allComments.clear()
+                    allComments.addAll(comments)
+                    adapter.notifyDataSetChanged()
                 }
             }
-        })
+        }
     }
     companion object {
         const val TAG = "PostFragment"
