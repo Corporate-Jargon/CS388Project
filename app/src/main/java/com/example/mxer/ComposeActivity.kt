@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -78,6 +79,47 @@ class ComposeActivity : AppCompatActivity() {
         // Return the file target for the photo based on filename
         return File(mediaStorageDir.path + File.separator + fileName)
     }
+    fun onLaunchCamera() {
+        // create Intent to take a picture and return control to the calling application
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        // Create a File reference for future access
+        photoFile = getPhotoFileUri(photoFileName)
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        if (photoFile != null) {
+            val fileProvider: Uri =
+                FileProvider.getUriForFile(this, "com.codepath.mxer.fileprovider", photoFile!!)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+            if (intent.resolveActivity(packageManager) != null) {
+                // Start the image capture intent to take photo
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // We have photo on disk
+                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+                // Resize bitmap
+                // Load the taken image into a preview
+                val ivPreview: ImageView = findViewById(R.id.imageView)
+                ivPreview.setImageBitmap(takenImage)
+            } else {
+                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     // Send a post object to our Parse server
     private fun submitCommunity(description: String, user: ParseUser, file: File) {
         // Create the Post object
@@ -116,6 +158,7 @@ class ComposeActivity : AppCompatActivity() {
 
             // Load the image located at photoUri into selectedImage
             val selectedImage = loadFromUri(photoUri)
+            photoFile = getPhotoFileUri(photoUri.toString())
             // Load the selected image into a preview
             val ivPreview: ImageView = findViewById(R.id.imageView)
             ivPreview.setImageBitmap(selectedImage)
@@ -129,20 +172,12 @@ class ComposeActivity : AppCompatActivity() {
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
-        photoFile = getPhotoFileUri(photoFileName)
-        if (photoFile != null) {
-            val fileProvider: Uri =
-                FileProvider.getUriForFile(this, "com.codepath.mxer.fileprovider", photoFile!!)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
-
-
             // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
             // So as long as the result is not null, it's safe to use the intent.
             if (intent.resolveActivity(getPackageManager()) != null) {
                 // Bring up gallery to select a photo
                 startActivityForResult(intent, PICK_PHOTO_CODE)
             }
-        }
     }
 
     fun loadFromUri(photoUri: Uri?): Bitmap? {
