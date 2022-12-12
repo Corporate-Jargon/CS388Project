@@ -52,7 +52,7 @@ class ComposeActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.btnTakePicture).setOnClickListener {
             // Launch camera to let user take picture
-            onPickPhoto()
+            onLaunchCamera()
         }
         findViewById<TextView>(R.id.skip_link).setOnClickListener {
             goToMainActivity()
@@ -81,26 +81,26 @@ class ComposeActivity : AppCompatActivity() {
         // Return the file target for the photo based on filename
         return File(mediaStorageDir.path + File.separator + fileName)
     }
-    fun getPath(uri: Uri?): String? {
-        if (uri == null) {
-            return null
-        }
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor? = this.getContentResolver().query(
-            uri, projection, null,
-            null, null
-        )
-        if (cursor != null) {
-            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            return cursor.getString(column_index)
-        }
-        assert(false)
-        if (cursor != null) {
-            cursor.close()
-        }
-        return uri.path
-    }
+//    fun getPath(uri: Uri?): String? {
+//        if (uri == null) {
+//            return null
+//        }
+//        val projection = arrayOf(MediaStore.Images.Media.DATA)
+//        val cursor: Cursor? = this.getContentResolver().query(
+//            uri, projection, null,
+//            null, null
+//        )
+//        if (cursor != null) {
+//            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//            cursor.moveToFirst()
+//            return cursor.getString(column_index)
+//        }
+//        assert(false)
+//        if (cursor != null) {
+//            cursor.close()
+//        }
+//        return uri.path
+//    }
     fun onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -127,21 +127,21 @@ class ComposeActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                // We have photo on disk
-//                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-//                // Resize bitmap
-//                // Load the taken image into a preview
-//                val ivPreview: ImageView = findViewById(R.id.imageView)
-//                ivPreview.setImageBitmap(takenImage)
-//            } else {
-//                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // We have photo on disk
+                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+                // Resize bitmap
+                // Load the taken image into a preview
+                val ivPreview: ImageView = findViewById(R.id.imageView)
+                ivPreview.setImageBitmap(takenImage)
+            } else {
+                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     // Send a post object to our Parse server
     private fun submitCommunity(description: String, user: ParseUser, file: File) {
         // Create the Post object
@@ -173,21 +173,21 @@ class ComposeActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (data != null && requestCode == PICK_PHOTO_CODE) {
-            val photoUri = data.data
-
-            // Load the image located at photoUri into selectedImage
-            val selectedImage = loadFromUri(photoUri)
-val imagePath = getPath(photoUri)
-            photoFile = File(imagePath)
-//            photoFile = getPhotoFileUri(photoUri.toString())
-            // Load the selected image into a preview
-            val ivPreview: ImageView = findViewById(R.id.imageView)
-            ivPreview.setImageBitmap(selectedImage)
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (data != null && requestCode == PICK_PHOTO_CODE) {
+//            val photoUri = data.data
+//
+//            // Load the image located at photoUri into selectedImage
+//            val selectedImage = loadFromUri(photoUri)
+//val imagePath = getPath(photoUri)
+//            photoFile = File(imagePath)
+////            photoFile = getPhotoFileUri(photoUri.toString())
+//            // Load the selected image into a preview
+//            val ivPreview: ImageView = findViewById(R.id.imageView)
+//            ivPreview.setImageBitmap(selectedImage)
+//        }
+//    }
 
     // Trigger gallery selection for a photo
     fun onPickPhoto() {
