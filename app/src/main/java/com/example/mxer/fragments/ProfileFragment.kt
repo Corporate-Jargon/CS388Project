@@ -59,8 +59,6 @@ class ProfileFragment : Fragment() {
         val btnDeleteEvent = view.findViewById<Button>(R.id.btn_deleteevent)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
-        val tvPrimeCommunity = view.findViewById<TextView>(R.id.communityName)
-        tvPrimeCommunity.text = "None"
         val dialog = AlertDialog.Builder(requireContext()).create()
         etBio = EditText(requireContext())
         dialog.setTitle(" Edit Bio ")
@@ -245,22 +243,11 @@ class ProfileFragment : Fragment() {
                 if (e != null) {
                     // Something went wrong
                     Log.e(TAG, "Error fetching communities")
-                    if (tvPrimeCommunity != null) {
-                        tvPrimeCommunity.text = "None"
-                    }
                 } else {
                     if (communities != null) {
                         userCommunities.addAll(communities)
                         Log.i(TAG, "User Communities: $userCommunities")
-                        if (userCommunities.isEmpty()) {
-                            Log.i(TAG, "Here")
-                            if (tvPrimeCommunity != null) {
-                                tvPrimeCommunity.text = "None"
-                            }
-                        }
-                        else {
-                            Log.i(TAG, "There")
-
+                        if (userCommunities.isNotEmpty()) {
                             val userCommunity = userCommunities[0]
                             if (tvPrimeCommunity != null) {
                                 tvPrimeCommunity.text = userCommunity.getName()
