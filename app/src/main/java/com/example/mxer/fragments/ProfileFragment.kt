@@ -57,11 +57,8 @@ class ProfileFragment : Fragment() {
         val tvUserName = view.findViewById<TextView>(R.id.username)
         val btnCreateEvent = view.findViewById<Button>(R.id.btn_createevent)
         val btnDeleteEvent = view.findViewById<Button>(R.id.btn_deleteevent)
-        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
-//        val tvPrimeCommunity = view.findViewById<TextView>(R.id.primaryCommunity)
         val tvBio = view.findViewById<TextView>(R.id.bio)
         val ivPfp = view.findViewById<ImageView>(R.id.profilePicture)
-
         val dialog = AlertDialog.Builder(requireContext()).create()
         etBio = EditText(requireContext())
         dialog.setTitle(" Edit Bio ")
@@ -93,8 +90,6 @@ class ProfileFragment : Fragment() {
                 dialog, id -> setBio(etBio)
             tvBio.text = user.getString("description")
         })
-
-
     }
 
 
@@ -239,6 +234,7 @@ class ProfileFragment : Fragment() {
 
     fun getUserCommunities() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
+        val tvPrimeCommunity = view?.findViewById<TextView>(R.id.communityName)
         query.whereEqualTo("isEvent", 0)
         query.include(Community.KEY_OWNER)
         query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
@@ -251,6 +247,12 @@ class ProfileFragment : Fragment() {
                     if (communities != null) {
                         userCommunities.addAll(communities)
                         Log.i(TAG, "User Communities: $userCommunities")
+                        if (userCommunities.isNotEmpty()) {
+                            val userCommunity = userCommunities[0]
+                            if (tvPrimeCommunity != null) {
+                                tvPrimeCommunity.text = userCommunity.getName()
+                            }
+                        }
                     }
                 }
             }
