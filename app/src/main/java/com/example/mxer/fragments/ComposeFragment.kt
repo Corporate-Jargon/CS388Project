@@ -1,8 +1,6 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,12 +24,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 open class ComposeFragment : Fragment() {
     var score: Double = -1.0
-    var longertweet = 0
     private lateinit var communicator: Communicator
     private lateinit var originalCommunity: Community
-    lateinit var etCompose: EditText
-    lateinit var btnTweet: Button
-    lateinit var tvCount: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,49 +38,20 @@ open class ComposeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
         communicator = activity as Communicator
-        etCompose = view.findViewById(R.id.etPost)
-        btnTweet = view.findViewById(R.id.btnPost)
-        tvCount = view.findViewById(R.id.tvCount)
         val bundle: Bundle = requireArguments()
         val commId = bundle.getString("CommunityId","")
-        if (commId == "tie1n4SSCr") {
-            tvCount.visibility = TextView.VISIBLE
-        }
-        else {
-            tvCount.visibility = TextView.INVISIBLE
-        }
-        tvCount.text = "280"
-        etCompose.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.i(TAG,"beforeChange")
 
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val tweetContent = etCompose.text.toString()
-                val tweetLength = tweetContent.length
-                if (tweetContent.isEmpty()) {
-                    tvCount.text = "280"
-                }
-                else {
-                    val lengthLeft = 280-tweetLength
-                    tvCount.text = lengthLeft.toString()
-                    if (commId == "tie1n4SSCr") {
-                        btnTweet.isEnabled = tweetLength <= 280
-                    }
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                Log.i(TAG,"afterChange")
-            }
-
-        })
         queryCommunity(commId)
     }
 
     // Send a post object to our Parse server
-    fun submitPost(description: String, user: ParseUser, score: Double, community: Community) {
+    fun submitPost(
+        description: String,
+        user: ParseUser,
+        score: Double,
+        community: Community,
+        commId: String
+    ) {
         val pb = view?.findViewById<View>(R.id.pbLoading) as ProgressBar
         pb.visibility = ProgressBar.VISIBLE
         val post = Post()
@@ -96,14 +61,31 @@ open class ComposeFragment : Fragment() {
         post.setComm(community)
         post.saveInBackground { exception ->
             if (exception != null) {
-                Log.e(MainActivity.TAG, "Error while saving post")
+                Log.e(TAG, "Error while saving post")
                 exception.printStackTrace()
                 Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
 
             } else {
-                Log.i(MainActivity.TAG, "Successfully saved post")
-                // Reset views
-                view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                if (commId == "tie1n4SSCr") {
+                    originalCommunity.setCount(description.length)
+                    originalCommunity.saveInBackground { exception ->
+                        if (exception == null) {
+                            Log.i(TAG, "Successfully saved post")
+                            // Reset views
+                            view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                        }
+                        else {
+                            Log.i(TAG, "Could not save count")
+                            // Reset views
+                            view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                        }
+                    }
+                }
+                else {
+                    Log.i(TAG, "Successfully saved post")
+                    // Reset views
+                    view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                }
             }
             pb.visibility = ProgressBar.INVISIBLE
         }
@@ -124,16 +106,29 @@ open class ComposeFragment : Fragment() {
                             // Get description
                             val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
                             val user = ParseUser.getCurrentUser()
+                            // Check the count to continue
+                            if (commId == "tie1n4SSCr") {
+                                val count = originalCommunity.getCount()
+                                val realCount = count?.toInt()
+                                Log.i(TAG, realCount.toString())
+                                if (description.length <= realCount!!) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "The count is $realCount now, try to make it longer",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    return@setOnClickListener
 
-                            // Double exclamation points mean file is guaranteed not to be null
-                            postAPI(description, user)
+                                }
+                            }
+                            postAPI(description, user, commId)
                         }
                     }
                 }
             }
         })
     }
-    fun postAPI(description: String, user: ParseUser) {
+    fun postAPI(description: String, user: ParseUser, commId: String) {
         val requestHeaders = RequestHeaders()
         val params = RequestParams()
         val api_key = getString(R.string.perspective_key)
@@ -172,9 +167,9 @@ open class ComposeFragment : Fragment() {
                     val threshold = 0.75
                     if (filterSetting) {
                         if (score < threshold) {
-                            submitPost(description, user, score, originalCommunity)
+                            submitPost(description, user, score, originalCommunity, commId)
                         } else {
-                            Log.e(MainActivity.TAG, "Error submitting post from toxicity")
+                            Log.e(TAG, "Error submitting post from toxicity")
                             Toast.makeText(
                                 requireContext(),
                                 "Post is too toxic. Lighten up :)",
@@ -182,7 +177,7 @@ open class ComposeFragment : Fragment() {
                             ).show()
                         }
                     } else {
-                        submitPost(description, user, score, originalCommunity)
+                        submitPost(description, user, score, originalCommunity, commId)
                     }
 
                     communicator.passCommunity(community)
