@@ -45,15 +45,12 @@ class ComposeActivity : AppCompatActivity() {
             } else {
                 Log.e(TAG, "Error getting picture")
                 Toast.makeText(this, "Take a picture!", Toast.LENGTH_SHORT).show()
-
-
             }
         }
         findViewById<Button>(R.id.btnTakePicture).setOnClickListener {
             // Launch camera to let user take picture
-            onLaunchCamera()
+            onPickPhoto()
         }
-        queryPosts()
     }
 
     fun goToMainActivity() {
@@ -62,20 +59,7 @@ class ComposeActivity : AppCompatActivity() {
         // End app after using back button by closing this activity
         finish()
     }
-    fun createEvent() {
-            // Bug fix for accounts that may not have a community owned
 
-                community.saveInBackground { exception ->
-                    if (exception != null) {
-                        Log.e(ProfileFragment.TAG, "Error while saving event")
-                        exception.printStackTrace()
-                    } else {
-                        Log.i(ProfileFragment.TAG, "Successfully saved event")
-                        Log.i(ProfileFragment.TAG, "Event: $community")
-                        Toast.makeText(this, "Created event", Toast.LENGTH_SHORT).show()
-                    }
-        }
-    }
     // Send a post object to our Parse server
     private fun submitCommunity(description: String, user: ParseUser, file: File) {
         // Create the Post object
@@ -96,6 +80,7 @@ class ComposeActivity : AppCompatActivity() {
 
             } else {
                 Log.i(TAG, "Successfully saved community")
+                Toast.makeText(this, "New community created", Toast.LENGTH_SHORT).show()
                 // Reset views
                 findViewById<EditText>(R.id.description).setText("")
                 findViewById<ImageView>(R.id.imageView).setImageBitmap(null)
@@ -118,67 +103,9 @@ class ComposeActivity : AppCompatActivity() {
             ivPreview.setImageBitmap(selectedImage)
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // We have photo on disk
-                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-                // Resize bitmap
-                // Load the taken image into a preview
-                val ivPreview: ImageView = findViewById(R.id.imageView)
-                ivPreview.setImageBitmap(takenImage)
-            } else {
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    fun onLaunchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        // Create a File reference for future access
-        photoFile = getPhotoFileUri(photoFileName)
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        if (photoFile != null) {
-            val fileProvider: Uri =
-                FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile!!)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
-
-            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-            // So as long as the result is not null, it's safe to use the intent.
-
-            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-            // So as long as the result is not null, it's safe to use the intent.
-            if (intent.resolveActivity(packageManager) != null) {
-                // Start the image capture intent to take photo
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
-            }
-        }
-    }
-
-    // Returns the File for a photo stored on disk given the fileName
-    fun getPhotoFileUri(fileName: String): File {
-        // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
-        val mediaStorageDir =
-            File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG)
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(TAG, "failed to create directory")
-        }
-
-        // Return the file target for the photo based on filename
-        return File(mediaStorageDir.path + File.separator + fileName)
-    }
 
     // Trigger gallery selection for a photo
-    fun onPickPhoto(view: View?) {
+    fun onPickPhoto() {
         // Create intent for picking a photo from the gallery
         val intent = Intent(
             Intent.ACTION_PICK,
@@ -189,7 +116,7 @@ class ComposeActivity : AppCompatActivity() {
         // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
             // Bring up gallery to select a photo
-            ActivityCompat.startActivityForResult(intent, PICK_PHOTO_CODE)
+            startActivityForResult(intent, PICK_PHOTO_CODE)
         }
     }
 
