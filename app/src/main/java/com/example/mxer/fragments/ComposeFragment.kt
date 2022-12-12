@@ -1,6 +1,8 @@
 package com.example.mxer.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,8 +26,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 open class ComposeFragment : Fragment() {
     var score: Double = -1.0
+    var longertweet = 0
     private lateinit var communicator: Communicator
     private lateinit var originalCommunity: Community
+    lateinit var etCompose: EditText
+    lateinit var btnTweet: Button
+    lateinit var tvCount: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,8 +44,44 @@ open class ComposeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fragmentManager: FragmentManager = parentFragmentManager
         communicator = activity as Communicator
+        etCompose = view.findViewById(R.id.etPost)
+        btnTweet = view.findViewById(R.id.btnPost)
+        tvCount = view.findViewById(R.id.tvCount)
         val bundle: Bundle = requireArguments()
         val commId = bundle.getString("CommunityId","")
+        if (commId == "tie1n4SSCr") {
+            tvCount.visibility = TextView.VISIBLE
+        }
+        else {
+            tvCount.visibility = TextView.INVISIBLE
+        }
+        tvCount.text = "280"
+        etCompose.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Log.i(TAG,"beforeChange")
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val tweetContent = etCompose.text.toString()
+                val tweetLength = tweetContent.length
+                if (tweetContent.isEmpty()) {
+                    tvCount.text = "280"
+                }
+                else {
+                    val lengthLeft = 280-tweetLength
+                    tvCount.text = lengthLeft.toString()
+                    if (commId == "tie1n4SSCr") {
+                        btnTweet.isEnabled = tweetLength <= 280
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                Log.i(TAG,"afterChange")
+            }
+
+        })
         queryCommunity(commId)
     }
 
