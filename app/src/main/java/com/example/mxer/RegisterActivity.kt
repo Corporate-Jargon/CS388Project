@@ -40,7 +40,7 @@ class RegisterActivity : LoginActivity() {
         user.setPassword(password)
         user.signUpInBackground { e ->
             if (e == null) {
-                goToMainActivity()
+                goToComposeActivity()
                 Toast.makeText(this, "Mixed up!", Toast.LENGTH_SHORT).show()
             } else {
                 e.printStackTrace()
@@ -48,7 +48,12 @@ class RegisterActivity : LoginActivity() {
             }
         }
     }
-
+    fun goToComposeActivity() {
+        val intent = Intent(this@RegisterActivity, ComposeActivity::class.java)
+        startActivity(intent)
+        // End app after using back button by closing this activity
+        finish()
+    }
     companion object {
         const val TAG = "RegisterActivity"
     }

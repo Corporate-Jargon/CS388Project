@@ -51,6 +51,9 @@ class ComposeActivity : AppCompatActivity() {
             // Launch camera to let user take picture
             onPickPhoto()
         }
+        findViewById<TextView>(R.id.skip_link).setOnClickListener {
+            goToMainActivity()
+        }
     }
 
     fun goToMainActivity() {
@@ -59,7 +62,22 @@ class ComposeActivity : AppCompatActivity() {
         // End app after using back button by closing this activity
         finish()
     }
+    // Returns the File for a photo stored on disk given the fileName
+    fun getPhotoFileUri(fileName: String): File {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        val mediaStorageDir =
+            File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG)
 
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
+            Log.d(TAG, "failed to create directory")
+        }
+
+        // Return the file target for the photo based on filename
+        return File(mediaStorageDir.path + File.separator + fileName)
+    }
     // Send a post object to our Parse server
     private fun submitCommunity(description: String, user: ParseUser, file: File) {
         // Create the Post object
@@ -111,12 +129,19 @@ class ComposeActivity : AppCompatActivity() {
             Intent.ACTION_PICK,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
+        photoFile = getPhotoFileUri(photoFileName)
+        if (photoFile != null) {
+            val fileProvider: Uri =
+                FileProvider.getUriForFile(this, "com.codepath.mxer.fileprovider", photoFile!!)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            // Bring up gallery to select a photo
-            startActivityForResult(intent, PICK_PHOTO_CODE)
+
+            // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+            // So as long as the result is not null, it's safe to use the intent.
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                // Bring up gallery to select a photo
+                startActivityForResult(intent, PICK_PHOTO_CODE)
+            }
         }
     }
 
