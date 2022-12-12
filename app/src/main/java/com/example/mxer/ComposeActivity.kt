@@ -1,6 +1,7 @@
 package com.example.mxer
 
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -21,6 +22,7 @@ import com.parse.FindCallback
 import com.parse.ParseFile
 import com.parse.ParseQuery
 import com.parse.ParseUser
+import org.apache.commons.io.FilenameUtils.getPath
 import java.io.File
 import java.io.IOException
 
@@ -79,6 +81,26 @@ class ComposeActivity : AppCompatActivity() {
         // Return the file target for the photo based on filename
         return File(mediaStorageDir.path + File.separator + fileName)
     }
+    fun getPath(uri: Uri?): String? {
+        if (uri == null) {
+            return null
+        }
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = this.getContentResolver().query(
+            uri, projection, null,
+            null, null
+        )
+        if (cursor != null) {
+            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            return cursor.getString(column_index)
+        }
+        assert(false)
+        if (cursor != null) {
+            cursor.close()
+        }
+        return uri.path
+    }
     fun onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -105,21 +127,21 @@ class ComposeActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // We have photo on disk
-                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-                // Resize bitmap
-                // Load the taken image into a preview
-                val ivPreview: ImageView = findViewById(R.id.imageView)
-                ivPreview.setImageBitmap(takenImage)
-            } else {
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                // We have photo on disk
+//                val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+//                // Resize bitmap
+//                // Load the taken image into a preview
+//                val ivPreview: ImageView = findViewById(R.id.imageView)
+//                ivPreview.setImageBitmap(takenImage)
+//            } else {
+//                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
     // Send a post object to our Parse server
     private fun submitCommunity(description: String, user: ParseUser, file: File) {
         // Create the Post object
@@ -158,7 +180,9 @@ class ComposeActivity : AppCompatActivity() {
 
             // Load the image located at photoUri into selectedImage
             val selectedImage = loadFromUri(photoUri)
-            photoFile = getPhotoFileUri(photoUri.toString())
+val imagePath = getPath(photoUri)
+            photoFile = File(imagePath)
+//            photoFile = getPhotoFileUri(photoUri.toString())
             // Load the selected image into a preview
             val ivPreview: ImageView = findViewById(R.id.imageView)
             ivPreview.setImageBitmap(selectedImage)
@@ -168,9 +192,7 @@ class ComposeActivity : AppCompatActivity() {
     // Trigger gallery selection for a photo
     fun onPickPhoto() {
         // Create intent for picking a photo from the gallery
-        val intent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
             // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
             // So as long as the result is not null, it's safe to use the intent.
