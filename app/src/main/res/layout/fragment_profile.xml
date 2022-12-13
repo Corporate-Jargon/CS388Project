@@ -99,5 +99,16 @@ words"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bio" />
 
+    <TextView
+        android:id="@+id/communityName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="None"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/primaryCommunity"
+        app:layout_constraintStart_toStartOf="@+id/primaryCommunity" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
