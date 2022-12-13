@@ -11,38 +11,41 @@
         android:id="@+id/tv_notification"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="36dp"
         android:background="@color/tangerine"
         android:fontFamily="@font/kavoon_regular"
         android:padding="10dp"
         android:text="Push Notifications"
         android:textColor="@color/white"
         android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.136" />
 
     <TextView
         android:id="@+id/tv_filter"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="42dp"
         android:background="#EF8705"
         android:fontFamily="@font/kavoon_regular"
         android:padding="10dp"
         android:text="Profanity Filter"
         android:textColor="@color/white"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_notification" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_notification"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="42dp"
         android:width="200dp"
         android:background="#ED8605"
         android:fontFamily="@font/kavoon_regular"
@@ -50,14 +53,16 @@
         android:text="Accessibility"
         android:textColor="@color/white"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_filter" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_filter"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/sw_accessibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="30dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.287"
@@ -69,7 +74,7 @@
         android:id="@+id/sw_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="35dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.287"
@@ -81,7 +86,7 @@
         android:id="@+id/sw_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.282"
@@ -93,7 +98,7 @@
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="108dp"
+        android:layout_marginBottom="46dp"
         android:backgroundTint="#EB8505"
         android:fontFamily="@font/kavoon_regular"
         android:text="Save"
@@ -104,13 +109,12 @@
         app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.546" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
         android:backgroundTint="#EB8505"
         android:fontFamily="@font/kavoon_regular"
         android:text="Logout"
@@ -118,7 +122,9 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.887"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
