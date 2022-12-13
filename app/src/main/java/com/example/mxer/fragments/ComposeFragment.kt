@@ -102,7 +102,16 @@ open class ComposeFragment : Fragment() {
                 } else {
                     if(comms != null){
                         originalCommunity = comms[0]
-                        view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
+                        if (commId == "tie1n4SSCr") {
+                            val count = originalCommunity.getCount()
+                            val realCount = count?.toInt()
+                            Toast.makeText(
+                                requireContext(),
+                                "The letter count right now is $realCount, ascend past that!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                            view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
                             // Get description
                             val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
                             val user = ParseUser.getCurrentUser()
