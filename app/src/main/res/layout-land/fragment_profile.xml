@@ -59,7 +59,7 @@
         android:layout_marginTop="17dp"
         android:layout_marginEnd="41dp"
         android:fontFamily="@font/inter_regular"
-        android:text="Hello this is my bio. words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words
+        android:text="Hello this is my bio. words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
 words"
         android:textColor="@color/black"
         android:textSize="17sp"
@@ -75,19 +75,16 @@ words"
         android:id="@+id/btn_createevent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="62dp"
+        android:layout_marginTop="56dp"
         android:backgroundTint="#EB8505"
         android:fontFamily="@font/kavoon_regular"
         android:text="Create Event"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_deleteevent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.189"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bio"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/bio" />
 
     <Button
         android:id="@+id/btn_deleteevent"
@@ -100,21 +97,10 @@ words"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bio"
-        app:layout_constraintVertical_bias="0.605" />
-
-    <TextView
-        android:id="@+id/communityName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:text="None"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/primaryCommunity"
-        app:layout_constraintStart_toStartOf="@+id/primaryCommunity" />
+        app:layout_constraintVertical_bias="0.706" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
