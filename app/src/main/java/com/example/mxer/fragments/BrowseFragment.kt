@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,12 +41,29 @@ open class BrowseFragment : Fragment() {
         adapter = CommunityAdapter(requireContext(), allCommunities)
         rvCommunities.adapter = adapter
 
-        getCommunities()
-    }
+        getCommunities("")
 
-    private fun getCommunities() {
+        val svCommunities = view.findViewById<SearchView>(R.id.svCommunities)
+        svCommunities.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                allCommunities.clear()
+                if (p0 != null) {
+                    getCommunities(p0)
+                } else {
+                    getCommunities("")
+                }
+                return true
+            }
+        })
+    }
+    private fun getCommunities(name: String) {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 0)
+        query.whereMatches("name", "("+name+")", "i")
         query.findInBackground { communities, e ->
             if (e != null) {
                 Log.e(TAG, "Error fetching posts: $e")

@@ -76,11 +76,13 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
             tvAuthor.text = post.getAuthor()?.username
             tvTimestamp.text = getRelativeTimeAgo((post.createdAt).toString())
             tvBody.text = post.getDesc()
-            val options = RequestOptions().centerCrop().circleCrop()
+            var options: RequestOptions = RequestOptions()
+//            options.centerCrop()
+//            options.circleCrop()
             Glide.with(itemView)
                 .load(post.getAuthor()?.getParseFile("profile_picture")?.url)
-                .override(300, 300)
-                .apply(options)
+//                .override(300, 300)
+//                .apply(options)
                 .into(ivProfile)
         }
 

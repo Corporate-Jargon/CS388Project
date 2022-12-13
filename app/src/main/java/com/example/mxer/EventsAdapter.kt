@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.parse.ParseObject
 
 class EventsAdapter(
@@ -30,8 +32,22 @@ class EventsAdapter(
         }
         fun bind(community: Community, images1: Community, images2: Community) {
             tvName.text = community.getName()
-            Glide.with(itemView.context).load(images1.getIcon()?.url).into(ivIcon1)
-            Glide.with(itemView.context).load(images2.getIcon()?.url).into(ivIcon2)
+            Glide.with(itemView.context)
+                .asBitmap()
+                .load(images1.getIcon()?.url)
+                .fitCenter()
+                .apply(RequestOptions().override(500, 500))
+                .placeholder(R.drawable.ic_launcher_background)
+                .transform(RoundedCorners(50))
+                .into(ivIcon1)
+            Glide.with(itemView.context)
+                .asBitmap()
+                .load(images2.getIcon()?.url)
+                .fitCenter()
+                .apply(RequestOptions().override(500, 500))
+                .placeholder(R.drawable.ic_launcher_background)
+                .transform(RoundedCorners(50))
+                .into(ivIcon2)
 
             ivIcon1.setOnClickListener {
                 val comm = Community()

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,11 +39,32 @@ open class EventsFragment : Fragment() {
         adapter = EventsAdapter(requireContext(), allEvents, allEventsImg1, allEventsImg2)
         rvEvents.adapter = adapter
 
-        getEvents()
+        getEvents("")
+
+        val svEvents = view.findViewById<SearchView>(R.id.svEvents)
+        svEvents.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                allEvents.clear()
+                allEventsImg1.clear()
+                allEventsImg2.clear()
+                if (p0 != null) {
+                    getEvents(p0)
+                } else {
+                    getEvents("")
+                }
+                return true
+            }
+
+        })
     }
-    private fun getEvents() {
+    private fun getEvents(name: String) {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 1)
+        query.whereMatches("name", "("+name+")", "i")
         query.findInBackground { events, e ->
             if (e != null) {
                 Log.e(TAG, "Error fetching events: $e")
