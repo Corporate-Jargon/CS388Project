@@ -16,7 +16,7 @@
         android:layout_marginEnd="36dp"
         android:background="@color/tangerine"
         android:fontFamily="@font/kavoon_regular"
-        android:text="Events"
+        android:text="Mxes"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMxes"
+        android:id="@+id/rvEvents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/events_title" />
 
     <SearchView
-        android:id="@+id/svMxes"
+        android:id="@+id/svEvents"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"

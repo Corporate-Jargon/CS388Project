@@ -195,12 +195,12 @@ class ProfileFragment : Fragment() {
             event.setIsEvent(2)
             event.saveInBackground{ e ->
                 if (e == null) {
-                    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Mxe deleted", Toast.LENGTH_SHORT).show()
                     getOtherCommunities()
                     getUserCommunities()
                     getUserEvents()
                 } else {
-                    Toast.makeText(requireContext(), "Unable to delete event", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Unable to delete mxe", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -287,7 +287,7 @@ class ProfileFragment : Fragment() {
                     } else {
                         Log.i(TAG, "Successfully saved event")
                         Log.i(TAG, "Event: $event")
-                        Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Created mxe", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
@@ -295,7 +295,7 @@ class ProfileFragment : Fragment() {
             }
         }
         else {
-            Toast.makeText(requireContext(), "Only one event at a time", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Only one mxe at a time", Toast.LENGTH_SHORT).show()
         }
     }
 
