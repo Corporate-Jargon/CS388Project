@@ -16,6 +16,12 @@ class Community: ParseObject() {
     fun setName(name: String) {
         put(KEY_NAME, name)
     }
+    fun getCount(): Number? {
+        return getNumber(KEY_COUNT)
+    }
+    fun setCount(count: Number) {
+        put(KEY_COUNT, count)
+    }
     fun getIcon(): ParseFile? {
         return getParseFile(KEY_ICON)
     }
@@ -60,6 +66,7 @@ class Community: ParseObject() {
         const val KEY_ID = "objectId"
         const val KEY_NAME = "name"
         const val KEY_ICON = "icon"
+        const val KEY_COUNT = "count"
         const val KEY_DESC = "description"
         const val KEY_EVENT1 = "event_community1"
         const val KEY_EVENT2 = "event_community2"

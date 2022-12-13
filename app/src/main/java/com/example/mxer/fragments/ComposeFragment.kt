@@ -41,11 +41,18 @@ open class ComposeFragment : Fragment() {
         communicator = activity as Communicator
         val bundle: Bundle = requireArguments()
         val commId = bundle.getString("CommunityId","")
+
         queryCommunity(commId)
     }
 
     // Send a post object to our Parse server
-    fun submitPost(description: String, user: ParseUser, score: Double, community: Community) {
+    fun submitPost(
+        description: String,
+        user: ParseUser,
+        score: Double,
+        community: Community,
+        commId: String
+    ) {
         val pb = view?.findViewById<View>(R.id.pbLoading) as ProgressBar
         pb.visibility = ProgressBar.VISIBLE
         val post = Post()
@@ -55,14 +62,31 @@ open class ComposeFragment : Fragment() {
         post.setComm(community)
         post.saveInBackground { exception ->
             if (exception != null) {
-                Log.e(MainActivity.TAG, "Error while saving post")
+                Log.e(TAG, "Error while saving post")
                 exception.printStackTrace()
                 Toast.makeText(requireContext(), "Error saving post", Toast.LENGTH_SHORT).show()
 
             } else {
-                Log.i(MainActivity.TAG, "Successfully saved post")
-                // Reset views
-                view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                if (commId == "tie1n4SSCr") {
+                    originalCommunity.setCount(description.length)
+                    originalCommunity.saveInBackground { exception ->
+                        if (exception == null) {
+                            Log.i(TAG, "Successfully saved post")
+                            // Reset views
+                            view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                        }
+                        else {
+                            Log.i(TAG, "Could not save count")
+                            // Reset views
+                            view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                        }
+                    }
+                }
+                else {
+                    Log.i(TAG, "Successfully saved post")
+                    // Reset views
+                    view?.findViewById<EditText>(R.id.etPost)?.setText("")
+                }
             }
             pb.visibility = ProgressBar.INVISIBLE
         }
@@ -73,24 +97,46 @@ open class ComposeFragment : Fragment() {
         query.limit = 1
         query.whereEqualTo(Community.KEY_ID, commId)
         query.findInBackground { comms, e ->
-            if (e != null) {
+            if(e != null) {
                 Log.e(TAG, "Error fetching community")
             } else {
-                if (comms != null) {
+                if(comms != null){
                     originalCommunity = comms[0]
+                    if (commId == "tie1n4SSCr") {
+                        val count = originalCommunity.getCount()
+                        val realCount = count?.toInt()
+                        Toast.makeText(
+                            requireContext(),
+                            "The letter count right now is $realCount, ascend past that!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
                         // Get description
                         val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
                         val user = ParseUser.getCurrentUser()
+                        // Check the count to continue
+                        if (commId == "tie1n4SSCr") {
+                            val count = originalCommunity.getCount()
+                            val realCount = count?.toInt()
+                            Log.i(TAG, realCount.toString())
+                            if (description.length <= realCount!!) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "The count is $realCount now, try to make it longer",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@setOnClickListener
 
-                        // Double exclamation points mean file is guaranteed not to be null
-                        postAPI(description, user)
+                            }
+                        }
+                        postAPI(description, user, commId)
                     }
                 }
             }
         }
     }
-    fun postAPI(description: String, user: ParseUser) {
+    fun postAPI(description: String, user: ParseUser, commId: String) {
         val requestHeaders = RequestHeaders()
         val params = RequestParams()
         val api_key = getString(R.string.perspective_key)
@@ -129,9 +175,9 @@ open class ComposeFragment : Fragment() {
                     val threshold = 0.75
                     if (filterSetting) {
                         if (score < threshold) {
-                            submitPost(description, user, score, originalCommunity)
+                            submitPost(description, user, score, originalCommunity, commId)
                         } else {
-                            Log.e(MainActivity.TAG, "Error submitting post from toxicity")
+                            Log.e(TAG, "Error submitting post from toxicity")
                             Toast.makeText(
                                 requireContext(),
                                 "Post is too toxic. Lighten up :)",
@@ -139,7 +185,7 @@ open class ComposeFragment : Fragment() {
                             ).show()
                         }
                     } else {
-                        submitPost(description, user, score, originalCommunity)
+                        submitPost(description, user, score, originalCommunity, commId)
                     }
 
                     communicator.passCommunity(community)
