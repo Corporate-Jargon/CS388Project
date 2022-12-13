@@ -305,3 +305,6 @@ Optional:
 - [X] User logs in and is redirected to their primary community's page
 - [X] Design tables in Parse
 - [X] Design Login and Register Pages
+
+#### Sprint 4
+<img src="https://github.com/Corporate-Jargon/Mxer/blob/master/Week4Demo.gif"></img>
