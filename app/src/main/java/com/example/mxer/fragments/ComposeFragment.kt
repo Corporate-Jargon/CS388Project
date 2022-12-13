@@ -2,25 +2,26 @@ package com.example.mxer.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.parse.ParseUser
-import okhttp3.Headers
-import org.json.JSONObject
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestHeaders
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.ParseException
 import com.parse.ParseQuery
+import com.parse.ParseUser
+import okhttp3.Headers
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 open class ComposeFragment : Fragment() {
     var score: Double = -1.0
@@ -67,29 +68,27 @@ open class ComposeFragment : Fragment() {
         }
     }
 
-    fun queryCommunity(commId: String) {
+    private fun queryCommunity(commId: String) {
         val query : ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.limit = 1
         query.whereEqualTo(Community.KEY_ID, commId)
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(comms: MutableList<Community>?, e: ParseException?) {
-                if(e != null) {
-                    Log.e(TAG, "Error fetching community")
-                } else {
-                    if(comms != null){
-                        originalCommunity = comms[0]
-                        view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
-                            // Get description
-                            val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
-                            val user = ParseUser.getCurrentUser()
+        query.findInBackground { comms, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching community")
+            } else {
+                if (comms != null) {
+                    originalCommunity = comms[0]
+                    view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
+                        // Get description
+                        val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
+                        val user = ParseUser.getCurrentUser()
 
-                            // Double exclamation points mean file is guaranteed not to be null
-                            postAPI(description, user)
-                        }
+                        // Double exclamation points mean file is guaranteed not to be null
+                        postAPI(description, user)
                     }
                 }
             }
-        })
+        }
     }
     fun postAPI(description: String, user: ParseUser) {
         val requestHeaders = RequestHeaders()

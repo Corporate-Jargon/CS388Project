@@ -11,14 +11,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.ParseException
 import com.parse.ParseObject
 import com.parse.ParseQuery
 
 
 open class CommunityFragment: Fragment() {
-    lateinit var rvPosts: RecyclerView
+    private lateinit var rvPosts: RecyclerView
     lateinit var adapter: PostsAdapter
     lateinit var communicator: Communicator
     val allPosts = ArrayList<Post>()
@@ -58,20 +56,18 @@ open class CommunityFragment: Fragment() {
         query.addDescendingOrder("createdAt")
         query.limit = 20
         query.whereMatchesQuery("community", commQuery)
-        query.findInBackground(object : FindCallback<Post> {
-            override fun done(posts: MutableList<Post>?, e: ParseException?) {
-                if(e != null) {
-                    Log.e(TAG, "Error fetching posts: ${e}")
-                } else {
-                    if(posts != null) {
-                        Log.i(TAG, "Posts: ${posts}")
-                        allPosts.clear()
-                        allPosts.addAll(posts)
-                        adapter.notifyDataSetChanged()
-                    }
+        query.findInBackground { posts, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching posts: $e")
+            } else {
+                if (posts != null) {
+                    Log.i(TAG, "Posts: $posts")
+                    allPosts.clear()
+                    allPosts.addAll(posts)
+                    adapter.notifyDataSetChanged()
                 }
             }
-        })
+        }
     }
     companion object {
         const val TAG = "CommunityFragment"

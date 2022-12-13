@@ -11,19 +11,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
-class CommunityAdapter (val context: Context, val communities: ArrayList<Community>): RecyclerView.Adapter<CommunityAdapter.ViewHolder>() {
+class CommunityAdapter (val context: Context, private val communities: ArrayList<Community>): RecyclerView.Adapter<CommunityAdapter.ViewHolder>() {
     private lateinit var communicator: Communicator
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
-        val tvName: TextView
-        val ivIcon: ImageView
+        private val tvName: TextView
+        private val ivIcon: ImageView
         init {
-            tvName = itemView.findViewById<TextView>(R.id.tvCommName)
-            ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
+            tvName = itemView.findViewById(R.id.tvCommName)
+            ivIcon = itemView.findViewById(R.id.ivIcon)
         }
         fun bind(community: Community) {
-            tvName.setText(community.getName())
+            tvName.text = community.getName()
             Glide.with(itemView.context)
                 .load(community.getIcon()?.url)
                 .transform(RoundedCorners(50))
@@ -45,7 +45,7 @@ class CommunityAdapter (val context: Context, val communities: ArrayList<Communi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val community = communities.get(position)
+        val community = communities[position]
         holder.bind(community)
     }
 

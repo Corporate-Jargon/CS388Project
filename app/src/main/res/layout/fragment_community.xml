@@ -44,5 +44,6 @@
         app:backgroundTint="@color/china_rose"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="TODO" />
 </androidx.constraintlayout.widget.ConstraintLayout>

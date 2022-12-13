@@ -1,9 +1,7 @@
 package com.example.mxer
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -36,7 +34,7 @@ class RegisterActivity : LoginActivity() {
         // Create the ParseUser
         val user = ParseUser()
         // Set fields for the user to be created
-        user.setUsername(username)
+        user.username = username
         user.setPassword(password)
         user.signUpInBackground { e ->
             if (e == null) {

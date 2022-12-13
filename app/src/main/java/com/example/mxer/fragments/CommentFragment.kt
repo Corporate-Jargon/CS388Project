@@ -2,23 +2,17 @@ package com.example.mxer.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestHeaders
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import com.example.mxer.*
-import com.parse.FindCallback
-import com.parse.ParseException
 import com.parse.ParseQuery
 import com.parse.ParseUser
 import okhttp3.Headers
@@ -48,30 +42,28 @@ class CommentFragment : Fragment() {
         val postId = bundle.getString(Post.KEY_ID,"")
         queryPost(postId)
     }
-    fun queryPost(postId: String) {
+    private fun queryPost(postId: String) {
         val query : ParseQuery<Post> = ParseQuery.getQuery(Post::class.java)
         query.include(Post.KEY_AUTHOR)
         query.limit = 1
         query.whereEqualTo(Post.KEY_ID, postId)
-        query.findInBackground(object : FindCallback<Post> {
-            override fun done(posts: MutableList<Post>?, e: ParseException?) {
-                if(e != null) {
-                    Log.e(TAG, "Error fetching post")
-                } else {
-                    if(posts != null) {
-                        originalPost = posts[0]
-                        view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
-                            // Get description
-                            val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
-                            val user = ParseUser.getCurrentUser()
+        query.findInBackground { posts, e ->
+            if (e != null) {
+                Log.e(TAG, "Error fetching post")
+            } else {
+                if (posts != null) {
+                    originalPost = posts[0]
+                    view?.findViewById<Button>(R.id.btnPost)?.setOnClickListener {
+                        // Get description
+                        val description = view?.findViewById<EditText>(R.id.etPost)?.text.toString()
+                        val user = ParseUser.getCurrentUser()
 
-                            // Double exclamation points mean file is guaranteed not to be null
-                            postAPI(description, user)
-                        }
+                        // Double exclamation points mean file is guaranteed not to be null
+                        postAPI(description, user)
                     }
                 }
             }
-        })
+        }
     }
     fun submitComment(description: String, user: ParseUser, score: Double, post: Post) {
         val pb = view?.findViewById<View>(R.id.pbLoading) as ProgressBar
