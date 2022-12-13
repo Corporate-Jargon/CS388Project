@@ -9,7 +9,7 @@
     <item
         android:id="@+id/action_event"
         android:icon="@drawable/ic_baseline_event_24"
-        android:title="Events"
+        android:title="Mxes"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"

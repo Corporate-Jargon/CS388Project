@@ -189,7 +189,7 @@ class ProfileFragment : Fragment() {
 
     private fun deleteEvent() {
         if (userEvents.isEmpty()) {
-            Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "No Mxes to delete", Toast.LENGTH_SHORT).show()
         } else if (userEvents.isNotEmpty()) {
             val event = userEvents[0]
             event.setIsEvent(2)
