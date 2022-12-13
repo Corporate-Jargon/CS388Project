@@ -14,7 +14,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/tvAuthor"
@@ -78,6 +79,7 @@
         app:backgroundTint="@color/china_rose"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

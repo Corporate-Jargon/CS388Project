@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.parse.ParseUser
 import org.apache.commons.io.FileUtils
@@ -17,17 +16,17 @@ import java.io.IOException
 import java.nio.charset.Charset
 
 class SettingsActivity : AppCompatActivity() {
-    var listOfNums = mutableListOf<String>("true","true","true","true")
+    private var listOfNums = mutableListOf("true","true","true","true")
     enum class Setting(val pos: Int) {
         PUSH(0),
         FILTER(1),
         ACCESSIBILITY(2)
     }
-    lateinit var pushSwitch: SwitchMaterial
-    lateinit var filterSwitch: SwitchMaterial
-    lateinit var accessibleSwitch: SwitchMaterial
-    lateinit var saveBtn: Button
-    lateinit var logoutBtn: Button
+    private lateinit var pushSwitch: SwitchMaterial
+    private lateinit var filterSwitch: SwitchMaterial
+    private lateinit var accessibleSwitch: SwitchMaterial
+    private lateinit var saveBtn: Button
+    private lateinit var logoutBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +68,13 @@ class SettingsActivity : AppCompatActivity() {
             logoutUser()
         }
     }
-    fun getDataFile(): File {
+    private fun getDataFile(): File {
         // Every line is going to represent a specific task in our list of tasks
         val username = ParseUser.getCurrentUser().username
         return File(filesDir, "settings${username}.txt")
     }
     // Load the items by reading every line in the data file
-    fun loadItems() {
+    private fun loadItems() {
         try {
             listOfNums = FileUtils.readLines(getDataFile(), Charset.defaultCharset())
         } catch (ioException: IOException) {
@@ -84,7 +83,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     // Save items by writing them into our data file
-    fun saveItems() {
+    private fun saveItems() {
         try {
             FileUtils.writeLines(getDataFile(), listOfNums)
             Toast.makeText(this, "Saved settings!", Toast.LENGTH_SHORT).show()
@@ -104,69 +103,65 @@ class SettingsActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-    fun onDialogPositiveClick(dialog: DialogFragment) {
+    private fun onDialogPositiveClick() {
         listOfNums[Setting.FILTER.pos] = "true"
         filterSwitch.isChecked = listOfNums[Setting.FILTER.pos].toBoolean()
 
     }
-    fun onDialogPositiveClick1(dialog: DialogFragment) {
+    private fun onDialogPositiveClick1() {
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick2(DialogFragment()) }
-            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
-                DialogFragment()
-            ) }
-            .show()
-
-    }fun onDialogPositiveClick2(dialog: DialogFragment) {
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick3(DialogFragment()) }
-            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
-                DialogFragment()
-            ) }
-            .show()
-
-    }fun onDialogPositiveClick3(dialog: DialogFragment) {
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick4(DialogFragment()) }
-            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
-                DialogFragment()
-            ) }
-            .show()
-
-    }fun onDialogPositiveClick4(dialog: DialogFragment) {
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.yeah)) { _,_ -> onDialogPositiveClick(DialogFragment()) }
-            .setNegativeButton(getString(R.string.maybe)) { _,_ -> onDialogNegativeClick(
-                DialogFragment()
-            ) }
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick2() }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick() }
             .show()
 
     }
 
-    fun onDialogNegativeClick(dialog: DialogFragment) {
+    private fun onDialogPositiveClick2() {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick3() }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick() }
+            .show()
+
+    }
+
+    private fun onDialogPositiveClick3() {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick4() }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick() }
+            .show()
+
+    }
+
+    private fun onDialogPositiveClick4() {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.confirmation))
+            .setPositiveButton(getString(R.string.yeah)) { _,_ -> onDialogPositiveClick() }
+            .setNegativeButton(getString(R.string.maybe)) { _,_ -> onDialogNegativeClick() }
+            .show()
+
+    }
+
+    private fun onDialogNegativeClick() {
         listOfNums[Setting.FILTER.pos] = "false"
         filterSwitch.isChecked = listOfNums[Setting.FILTER.pos].toBoolean()
     }
-    fun showDialog(){
+    private fun showDialog(){
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.confirmation))
-            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick1(DialogFragment()) }
-            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick(
-                DialogFragment()
-            ) }
+            .setPositiveButton(getString(R.string.ok)) { _,_ -> onDialogPositiveClick1() }
+            .setNegativeButton(getString(R.string.cancel)) { _,_ -> onDialogNegativeClick() }
             .show()
     }
-    fun logoutUser() {
+    private fun logoutUser() {
         ParseUser.logOut()
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
         val currentUser = ParseUser.getCurrentUser() // this will now be null
         goToLoginActivity()
     }
-    fun goToLoginActivity() {
+    private fun goToLoginActivity() {
         val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
         startActivity(intent)
         // End app after using back button by closing this activity

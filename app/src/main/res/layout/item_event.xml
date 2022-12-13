@@ -34,7 +34,8 @@
         app:layout_constraintEnd_toStartOf="@+id/ivIcon2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCommName"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/ivIcon2"
@@ -48,6 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivIcon1"
         app:layout_constraintTop_toBottomOf="@+id/tvCommName"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

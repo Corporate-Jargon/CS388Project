@@ -1,12 +1,9 @@
 package com.example.mxer
 
-import com.parse.Parse
 import com.parse.ParseClassName
 import com.parse.ParseFile
 import com.parse.ParseObject
 import com.parse.ParseUser
-import org.json.JSONObject
-import java.sql.Date
 
 
 @ParseClassName("Post")
@@ -32,7 +29,7 @@ class Post : ParseObject() {
     fun setDesc(desc: String) {
         put(KEY_DESC, desc)
     }
-    fun getProfane(): Double? {
+    fun getProfane(): Double {
         return getDouble(KEY_PROFANE)
     }
     fun setProfane(profane: Double) {

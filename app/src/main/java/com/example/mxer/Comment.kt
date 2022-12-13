@@ -24,7 +24,7 @@ class Comment: ParseObject() {
     fun setDescription(desc: String) {
         put(KEY_DESCRIPTION, desc)
     }
-    fun getProfane(): Double? {
+    fun getProfane(): Double {
         return getDouble(KEY_PROFANE)
     }
     fun setProfane(profane: Double) {

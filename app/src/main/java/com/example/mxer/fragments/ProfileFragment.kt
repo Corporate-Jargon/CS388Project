@@ -10,36 +10,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.mxer.Community
-import com.example.mxer.MainActivity
 import com.example.mxer.R
 import com.parse.*
-import de.hdodenhof.circleimageview.CircleImageView
-import com.parse.ParseFile
-import com.parse.ParseUser
 import java.io.File
-import java.util.Collections
 
 class ProfileFragment : Fragment() {
-    var allCommunities: ArrayList<Community> = ArrayList<Community>()
-    var userCommunities: ArrayList<Community> = ArrayList<Community>()
-    var userEvents: ArrayList<Community> = ArrayList<Community>()
+    var allCommunities: ArrayList<Community> = ArrayList()
+    var userCommunities: ArrayList<Community> = ArrayList()
+    var userEvents: ArrayList<Community> = ArrayList()
 
-    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034
-    val photoFileName = "photo.jpg"
-    var photoFile: File? = null
-    lateinit var ivPfp: ImageView
-    lateinit var etBio: EditText
+    private val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034
+    private val photoFileName = "photo.jpg"
+    private var photoFile: File? = null
+    private lateinit var ivPfp: ImageView
+    private lateinit var etBio: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,16 +80,16 @@ class ProfileFragment : Fragment() {
 //            Toast.makeText(requireContext(), "Mixing up bio", Toast.LENGTH_LONG).show()
         }
 
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save Bio", DialogInterface.OnClickListener {
-                dialog, id -> setBio(etBio)
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE,"Save Bio") { dialog, id ->
+            setBio(etBio)
             tvBio.text = user.getString("description")
-        })
+        }
 
 
     }
 
 
-    fun onLaunchCamera() {
+    private fun onLaunchCamera() {
         // create Intent to take a picture and return control to the calling application
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Create a File reference for future access
@@ -128,7 +119,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    fun getPhotoFileUri(fileName: String): File {
+    private fun getPhotoFileUri(fileName: String): File {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
@@ -144,6 +135,7 @@ class ProfileFragment : Fragment() {
         return File(mediaStorageDir.path + File.separator + fileName)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -156,27 +148,27 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    fun setBio(etBio: EditText) {
+    private fun setBio(etBio: EditText) {
         val user = ParseUser.getCurrentUser()
         user.put("description", (etBio.text).toString())
         user.saveInBackground { e ->
             if (e == null) {
-                Log.i(Companion.TAG, "Successfully saved bio")
+                Log.i(TAG, "Successfully saved bio")
                 Toast.makeText(requireContext(), "Successfully updated bio!", Toast.LENGTH_SHORT).show()
             } else {
-                Log.e(Companion.TAG, e.printStackTrace().toString())
+                Log.e(TAG, e.printStackTrace().toString())
                 Toast.makeText(requireContext(), "Unable to update bio.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    fun setPfp(image: File) {
+    private fun setPfp(image: File) {
         val user = ParseUser.getCurrentUser()
         val pFile = ParseFile(image)
         user.put("profile_picture", pFile)
         user.saveInBackground { e ->
             if (e == null) {
-                Log.i(Companion.TAG, "Successfully saved profile picture")
+                Log.i(TAG, "Successfully saved profile picture")
                 Toast.makeText(
                     requireContext(),
                     "Successfully updated profile picture!",
@@ -185,10 +177,10 @@ class ProfileFragment : Fragment() {
                 val takenImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
                 // RESIZE BITMAP, see section below
                 // Load the taken image  into a preview
-                ivPfp = requireView().findViewById<ImageView>(R.id.profilePicture)
+                ivPfp = requireView().findViewById(R.id.profilePicture)
                 ivPfp.setImageBitmap(takenImage)
             } else {
-                Log.e(Companion.TAG, e.printStackTrace().toString())
+                Log.e(TAG, e.printStackTrace().toString())
                 Toast.makeText(
                     requireContext(),
                     "Unable to update profile picture.",
@@ -198,7 +190,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    fun deleteEvent() {
+    private fun deleteEvent() {
         if (userEvents.isEmpty()) {
             Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
         } else if (userEvents.isNotEmpty()) {
@@ -217,67 +209,61 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    fun getOtherCommunities() {
+    private fun getOtherCommunities() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 0)
         query.include(Community.KEY_OWNER)
         query.whereNotEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(communities: MutableList<Community>?, e: ParseException?) {
-                if (e != null) {
-                    // Something went wrong
-                    Log.e(TAG, "Error fetching communities")
-                } else {
-                    if (communities != null) {
-                        allCommunities.addAll(communities)
-                        Log.i(TAG, "Communities: $allCommunities")
-                    }
+        query.findInBackground { communities, e ->
+            if (e != null) {
+                // Something went wrong
+                Log.e(TAG, "Error fetching communities")
+            } else {
+                if (communities != null) {
+                    allCommunities.addAll(communities)
+                    Log.i(TAG, "Communities: $allCommunities")
                 }
             }
-        })
+        }
     }
 
-    fun getUserCommunities() {
+    private fun getUserCommunities() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 0)
         query.include(Community.KEY_OWNER)
         query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(communities: MutableList<Community>?, e: ParseException?) {
-                if (e != null) {
-                    // Something went wrong
-                    Log.e(TAG, "Error fetching communities")
-                } else {
-                    if (communities != null) {
-                        userCommunities.addAll(communities)
-                        Log.i(TAG, "User Communities: $userCommunities")
-                    }
+        query.findInBackground { communities, e ->
+            if (e != null) {
+                // Something went wrong
+                Log.e(TAG, "Error fetching communities")
+            } else {
+                if (communities != null) {
+                    userCommunities.addAll(communities)
+                    Log.i(TAG, "User Communities: $userCommunities")
                 }
             }
-        })
+        }
     }
 
-    fun getUserEvents() {
+    private fun getUserEvents() {
         val query: ParseQuery<Community> = ParseQuery.getQuery(Community::class.java)
         query.whereEqualTo("isEvent", 1)
         query.include(Community.KEY_OWNER)
         query.whereEqualTo(Community.KEY_OWNER, ParseUser.getCurrentUser())
-        query.findInBackground(object : FindCallback<Community> {
-            override fun done(events: MutableList<Community>?, e: ParseException?) {
-                if (e != null) {
-                    // Something went wrong
-                    Log.e(TAG, "Error fetching events")
-                } else {
-                    if (events != null) {
-                        userEvents.addAll(events)
-                        Log.i(TAG, "User Events: $userEvents")
-                    }
+        query.findInBackground { events, e ->
+            if (e != null) {
+                // Something went wrong
+                Log.e(TAG, "Error fetching events")
+            } else {
+                if (events != null) {
+                    userEvents.addAll(events)
+                    Log.i(TAG, "User Events: $userEvents")
                 }
             }
-        })
+        }
     }
 
-    fun createEvent() {
+    private fun createEvent() {
         if (userEvents.isEmpty()) {
             // Bug fix for accounts that may not have a community owned
             if (userCommunities.isNotEmpty()) {

@@ -99,6 +99,7 @@
         android:text="Log in"
         android:textColor="#3366CC"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pre_login" />
+        app:layout_constraintStart_toEndOf="@+id/pre_login"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
