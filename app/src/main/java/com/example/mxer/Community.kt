@@ -52,11 +52,9 @@ class Community: ParseObject() {
     fun setMxe2(id: ParseObject) {
         put(KEY_EVENT2, id)
     }
-    //TODO Delete function below once feed is fleshed out
     fun setId(id: String) {
         put(KEY_ID, id)
     }
-
     fun getIsEvent(): Number {
         return getInt(KEY_ISEVENT)
     }

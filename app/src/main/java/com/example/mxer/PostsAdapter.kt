@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import java.sql.Date
 
 class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
     private lateinit var communicator: Communicator
@@ -65,10 +64,10 @@ class PostsAdapter(private val context: Context, val posts: ArrayList<Post>) : R
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        val ivProfile = itemView.findViewById<ImageView>(R.id.ivProfile)
-        val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
-        val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
-        val tvBody = itemView.findViewById<TextView>(R.id.tvBody)
+        private val ivProfile = itemView.findViewById<ImageView>(R.id.ivProfile)
+        private val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
+        private val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
+        private val tvBody = itemView.findViewById<TextView>(R.id.tvBody)
         init {
             itemView.setOnClickListener(this)
         }

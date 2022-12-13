@@ -1,6 +1,5 @@
 package com.example.mxer
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -60,10 +58,10 @@ class CommentsAdapter(private val context: Context, val comments: ArrayList<Comm
         return comments.size
     }
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        val ivProfile = itemView.findViewById<ImageView>(R.id.ivProfile)
-        val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
-        val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
-        val tvBody = itemView.findViewById<TextView>(R.id.tvBody)
+        private val ivProfile: ImageView = itemView.findViewById<ImageView>(R.id.ivProfile)
+        private val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
+        private val tvTimestamp = itemView.findViewById<TextView>(R.id.tvTimestamp)
+        private val tvBody = itemView.findViewById<TextView>(R.id.tvBody)
         init {
             itemView.setOnClickListener(this)
         }
@@ -71,9 +69,7 @@ class CommentsAdapter(private val context: Context, val comments: ArrayList<Comm
             tvAuthor.text = comment.getAuthor()?.username
             tvTimestamp.text = getRelativeTimeAgo((comment.createdAt).toString())
             tvBody.text = comment.getDescription()
-            var options: RequestOptions = RequestOptions()
-            options.centerCrop()
-            options.circleCrop()
+            val options = RequestOptions().centerCrop().circleCrop()
             Glide.with(itemView)
                 .load(comment.getAuthor()?.getParseFile("profile_picture")?.url)
                 .override(300, 300)
