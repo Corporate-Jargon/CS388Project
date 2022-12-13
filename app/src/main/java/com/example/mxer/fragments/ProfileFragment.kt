@@ -67,6 +67,7 @@ class ProfileFragment : Fragment() {
         btnCreateEvent.setOnClickListener {
             createEvent()
         }
+
         btnDeleteEvent.setOnClickListener {
             deleteEvent()
         }
@@ -190,15 +191,14 @@ class ProfileFragment : Fragment() {
     private fun deleteEvent() {
         if (userEvents.isEmpty()) {
             Toast.makeText(requireContext(), "No Mxes to delete", Toast.LENGTH_SHORT).show()
-        } else if (userEvents.isNotEmpty()) {
+        } else {
             val event = userEvents[0]
             event.setIsEvent(2)
             event.saveInBackground{ e ->
+                Log.i(TAG, "Deleted")
                 if (e == null) {
                     Toast.makeText(requireContext(), "Mxe deleted", Toast.LENGTH_SHORT).show()
-                    getOtherCommunities()
-                    getUserCommunities()
-                    getUserEvents()
+                    userEvents.remove(event)
                 } else {
                     Toast.makeText(requireContext(), "Unable to delete mxe", Toast.LENGTH_SHORT).show()
                 }
@@ -281,12 +281,14 @@ class ProfileFragment : Fragment() {
                 event.setMxe2(selectedCommunity)
                 event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
                 event.saveInBackground { exception ->
+                    Log.i(TAG, "Created")
                     if (exception != null) {
                         Log.e(TAG, "Error while saving event")
                         exception.printStackTrace()
                     } else {
                         Log.i(TAG, "Successfully saved event")
                         Log.i(TAG, "Event: $event")
+                        userEvents.add(event)
                         Toast.makeText(requireContext(), "Created mxe", Toast.LENGTH_SHORT).show()
                     }
                 }
