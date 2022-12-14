@@ -67,6 +67,7 @@ class ProfileFragment : Fragment() {
         btnCreateEvent.setOnClickListener {
             createEvent()
         }
+
         btnDeleteEvent.setOnClickListener {
             deleteEvent()
         }
@@ -189,18 +190,17 @@ class ProfileFragment : Fragment() {
 
     private fun deleteEvent() {
         if (userEvents.isEmpty()) {
-            Toast.makeText(requireContext(), "No events to delete", Toast.LENGTH_SHORT).show()
-        } else if (userEvents.isNotEmpty()) {
+            Toast.makeText(requireContext(), "No Mxes to delete", Toast.LENGTH_SHORT).show()
+        } else {
             val event = userEvents[0]
             event.setIsEvent(2)
             event.saveInBackground{ e ->
+                Log.i(TAG, "Deleted")
                 if (e == null) {
-                    Toast.makeText(requireContext(), "Event deleted", Toast.LENGTH_SHORT).show()
-                    getOtherCommunities()
-                    getUserCommunities()
-                    getUserEvents()
+                    Toast.makeText(requireContext(), "Mxe deleted", Toast.LENGTH_SHORT).show()
+                    userEvents.remove(event)
                 } else {
-                    Toast.makeText(requireContext(), "Unable to delete event", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Unable to delete mxe", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -281,13 +281,15 @@ class ProfileFragment : Fragment() {
                 event.setMxe2(selectedCommunity)
                 event.setName("${userCommunity.getName()} Meets ${selectedCommunity.getName()}")
                 event.saveInBackground { exception ->
+                    Log.i(TAG, "Created")
                     if (exception != null) {
                         Log.e(TAG, "Error while saving event")
                         exception.printStackTrace()
                     } else {
                         Log.i(TAG, "Successfully saved event")
                         Log.i(TAG, "Event: $event")
-                        Toast.makeText(requireContext(), "Created event", Toast.LENGTH_SHORT).show()
+                        userEvents.add(event)
+                        Toast.makeText(requireContext(), "Created mxe", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
@@ -295,7 +297,7 @@ class ProfileFragment : Fragment() {
             }
         }
         else {
-            Toast.makeText(requireContext(), "Only one event at a time", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Only one mxe at a time", Toast.LENGTH_SHORT).show()
         }
     }
 
